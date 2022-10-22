@@ -1,20 +1,6 @@
 import React, { useState } from "react";
 import "./login.scss";
-import {
-  Flex,
-  Input,
-  Heading,
-  Select,
-  Text,
-  Button,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-  HStack,
-  FormLabel,
-} from "@chakra-ui/react";
+import { Flex, Input, Heading, Button } from "@chakra-ui/react";
 
 const Login = () => {
   const [username, setUsername] = useState("");
