@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./register.scss";
+import "./Register.scss";
 import {
   Flex,
   Input,
@@ -50,7 +50,7 @@ const Register = () => {
 
   return (
     <Flex
-      height="100vh"
+      height="90vh"
       justifyContent="center"
       alignItems="center"
       background="gray.500"

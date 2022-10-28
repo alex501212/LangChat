@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./login.scss";
+import "./Login.scss";
 import { Flex, Input, Heading, Button } from "@chakra-ui/react";
 
 const Login = () => {
@@ -13,7 +13,7 @@ const Login = () => {
 
   return (
     <Flex
-      height="100vh"
+      height="90vh"
       justifyContent="center"
       alignItems="center"
       background="gray.500"
