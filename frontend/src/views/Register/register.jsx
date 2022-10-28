@@ -25,7 +25,7 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passConfirm, setPassConfirm] = useState("");
-  const [language, setLanguage] = useState("");
+  const [targetLang, setTargetLang] = useState("");
 
   const formValues = {
     forename: forename,
@@ -35,7 +35,17 @@ const Register = () => {
     email: email,
     username: username,
     password: passConfirm,
-    language: language,
+    targetlang: targetLang,
+  };
+
+  const signUp = () => {
+    fetch("http://localhost:5000/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formValues),
+    }).then((res) => {
+      console.log(res, formValues);
+    });
   };
 
   return (
@@ -124,8 +134,8 @@ const Register = () => {
         />
         <FormLabel>What language are you learning?</FormLabel>
         <Select
-          value={language}
-          onChange={(e) => setLanguage(e.target.value)}
+          value={targetLang}
+          onChange={(e) => setTargetLang(e.target.value)}
           mb={10}
           placeholder="Select a language"
         >
@@ -133,11 +143,7 @@ const Register = () => {
           <option>English</option>
           <option>Spanish</option>
         </Select>
-        <Button
-          type="submit"
-          onClick={() => console.log(formValues)}
-          colorScheme="blue"
-        >
+        <Button type="submit" onClick={() => signUp()} colorScheme="blue">
           Register
         </Button>
       </Flex>
