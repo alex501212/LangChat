@@ -38,7 +38,7 @@ const Register = () => {
     targetlang: targetLang,
   };
 
-  const signUp = () => {
+  const register = () => {
     fetch("http://localhost:5000/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -143,7 +143,7 @@ const Register = () => {
           <option>English</option>
           <option>Spanish</option>
         </Select>
-        <Button type="submit" onClick={() => signUp()} colorScheme="blue">
+        <Button type="submit" onClick={() => register()} colorScheme="blue">
           Register
         </Button>
       </Flex>
