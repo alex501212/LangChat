@@ -3,6 +3,10 @@ const router = express.Router();
 const registerDetails = require("../models/RegisterModels");
 const bcrypt = require("bcrypt");
 const { ObjectId } = require("mongodb");
+const dotenv = require("dotenv");
+const jwt = require("jsonwebtoken");
+
+dotenv.config();
 
 // add new user
 router.post("/register", async (req, res) => {
@@ -51,6 +55,46 @@ router.get("/users/:id", (req, res) => {
     .catch((error) => {
       res.json(error);
     });
+});
+
+// authenticate user
+router.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+
+  const user = await registerDetails.findOne({ username: username });
+  if (!user) {
+    return res.json({
+      status: "error",
+      error: "specified user does not exist",
+    });
+  }
+  if (await bcrypt.compare(password, user.password)) {
+    const token = jwt.sign({ user }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+
+    if (res.status(201)) {
+      return res.json({ status: "ok", token: token });
+    } else {
+      return res.json({ status: "error", error: "error" });
+    }
+  }
+  res.json({ error: "invalid password" });
+});
+
+router.post("/dashboard", async (req, res) => {
+  const { token } = req.body;
+  try {
+    const user = jwt.verify(token, process.env.JWT_SECRET);
+    registerDetails
+      .findOne({ username: user.user.username })
+      .then((data) => {
+        res.send({ status: "ok", data: data });
+      })
+      .catch((error) => {
+        res.send({ status: "error", data: error });
+      });
+  } catch (error) {}
 });
 
 // delete user by id

@@ -1,14 +1,36 @@
 import React, { useState } from "react";
 import "./Login.scss";
 import { Flex, Input, Heading, Button } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  
+  
 
-  const formValues = {
-    username: username,
-    password: password,
+  const signIn = () => {
+    fetch("http://localhost:5000/login", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+      }),
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      if(data.status === "ok")
+      {
+        window.sessionStorage.setItem("token", data.token)
+        navigate("/dashboard")
+      }
+    })
   };
 
   return (
@@ -40,11 +62,7 @@ const Login = () => {
           placeholder="Password"
         />
 
-        <Button
-          type="submit"
-          onClick={() => console.log(formValues)}
-          colorScheme="blue"
-        >
+        <Button type="submit" onClick={() => signIn()} colorScheme="blue">
           Login
         </Button>
       </Flex>
