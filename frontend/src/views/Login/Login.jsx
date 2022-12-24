@@ -3,14 +3,11 @@ import "./Login.scss";
 import { Flex, Input, Heading, Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
-
 const Login = () => {
   const navigate = useNavigate();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  
-  
 
   const signIn = () => {
     fetch("http://localhost:5000/login", {
@@ -23,14 +20,13 @@ const Login = () => {
         password: password,
       }),
     })
-    .then((res) => res.json())
-    .then((data) => {
-      if(data.status === "ok")
-      {
-        window.sessionStorage.setItem("token", data.token)
-        navigate("/dashboard")
-      }
-    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === "ok") {
+          window.sessionStorage.setItem("token", data.token);
+          navigate("/dashboard");
+        }
+      });
   };
 
   return (

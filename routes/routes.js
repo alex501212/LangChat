@@ -21,7 +21,8 @@ router.post("/register", async (req, res) => {
     email: req.body.email,
     username: req.body.username,
     password: password,
-    targetlang: req.body.targetlang,
+    nativeLang: req.body.nativeLang,
+    targetLang: req.body.targetLang,
   });
   newUser
     .save()
@@ -127,7 +128,8 @@ router.put("/users/:id", async (req, res) => {
       email: req.body.email,
       username: req.body.username,
       password: password,
-      targetlang: req.body.targetlang,
+      nativeLang: req.body.nativeLang,
+      targetLang: req.body.targetLang,
     })
     .then((data) => {
       res.json(data);

@@ -8,7 +8,7 @@ import NavHeader from "../components/NavHeader";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter >
       <NavHeader />
       <Routes>
         <Route path="/home" element={<Home />} />

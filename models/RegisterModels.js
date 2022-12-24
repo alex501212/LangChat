@@ -29,7 +29,11 @@ const registerSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  targetlang: {
+  nativeLang: {
+    type: String,
+    required: true,
+  },
+  targetLang: {
     type: String,
     required: true,
   },

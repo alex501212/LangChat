@@ -15,8 +15,11 @@ import {
   HStack,
   FormLabel,
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const navigate = useNavigate();
+
   const [forename, setForename] = useState("");
   const [surname, setSurname] = useState("");
   const [age, setAge] = useState(18);
@@ -25,6 +28,7 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passConfirm, setPassConfirm] = useState("");
+  const [nativeLang, setNativeLang] = useState("");
   const [targetLang, setTargetLang] = useState("");
 
   const formValues = {
@@ -35,7 +39,8 @@ const Register = () => {
     email: email,
     username: username,
     password: passConfirm,
-    targetlang: targetLang,
+    nativeLang: nativeLang,
+    targetLang: targetLang,
   };
 
   const register = () => {
@@ -43,9 +48,14 @@ const Register = () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formValues),
-    }).then((res) => {
-      console.log(res, formValues);
-    });
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === "ok") {
+          window.sessionStorage.setItem("token", data.token);
+          navigate("/login");
+        }
+      });
   };
 
   return (
@@ -57,7 +67,7 @@ const Register = () => {
     >
       <Flex
         direction="column"
-        p={10}
+        p={5}
         borderWidth="5px"
         borderRadius="lg"
         background="white"
@@ -132,6 +142,17 @@ const Register = () => {
           type={"password"}
           placeholder="Confirm Password"
         />
+        <FormLabel>What is your native language?</FormLabel>
+        <Select
+          value={nativeLang}
+          onChange={(e) => setNativeLang(e.target.value)}
+          mb={10}
+          placeholder="Select a language"
+        >
+          <option>Japanese</option>
+          <option>English</option>
+          <option>Spanish</option>
+        </Select>
         <FormLabel>What language are you learning?</FormLabel>
         <Select
           value={targetLang}
