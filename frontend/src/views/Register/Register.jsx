@@ -51,10 +51,7 @@ const Register = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.status === "ok") {
-          window.sessionStorage.setItem("token", data.token);
-          navigate("/login");
-        }
+        navigate("/login");
       });
   };
 
