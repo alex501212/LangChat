@@ -30,6 +30,7 @@ const Register = () => {
   const [passConfirm, setPassConfirm] = useState("");
   const [nativeLang, setNativeLang] = useState("");
   const [targetLang, setTargetLang] = useState("");
+  const [profileImage, setProfileImage] = useState("");
 
   const formValues = {
     forename: forename,
@@ -41,18 +42,34 @@ const Register = () => {
     password: passConfirm,
     nativeLang: nativeLang,
     targetLang: targetLang,
+    profileImage: profileImage,
   };
 
   const register = () => {
+    const formData = new FormData();
+    formData.append("forename", forename);
+    formData.append("surname", surname);
+    formData.append("age", age);
+    formData.append("gender", gender);
+    formData.append("email", email);
+    formData.append("username", username);
+    formData.append("password", passConfirm);
+    formData.append("nativeLang", nativeLang);
+    formData.append("targetLang", targetLang);
+    formData.append("profileImage", profileImage);
     fetch("http://localhost:5000/register", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formValues),
+      body: formData,
     })
       .then((res) => res.json())
       .then((data) => {
         navigate("/login");
       });
+  };
+
+  const hiddenFileInput = React.useRef(null);
+  const uploadFile = (event) => {
+    hiddenFileInput.current.click();
   };
 
   return (
@@ -139,28 +156,40 @@ const Register = () => {
           type={"password"}
           placeholder="Confirm Password"
         />
-        <FormLabel>What is your native language?</FormLabel>
         <Select
           value={nativeLang}
           onChange={(e) => setNativeLang(e.target.value)}
           mb={10}
-          placeholder="Select a language"
+          placeholder="What is your native language?"
         >
           <option>Japanese</option>
           <option>English</option>
           <option>Spanish</option>
         </Select>
-        <FormLabel>What language are you learning?</FormLabel>
         <Select
           value={targetLang}
           onChange={(e) => setTargetLang(e.target.value)}
           mb={10}
-          placeholder="Select a language"
+          placeholder="What language are you learning?"
         >
           <option>Japanese</option>
           <option>English</option>
           <option>Spanish</option>
         </Select>
+        <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
+          <Button type="submit" colorScheme="blue" onClick={uploadFile}>
+            Upload Profile Picture
+          </Button>
+          <input
+            onChange={(e) => setProfileImage(e.target.files[0])}
+            mb={5}
+            type="file"
+            ref={hiddenFileInput}
+            style={{ display: "none" }}
+          />
+          <Text>{profileImage?.name}</Text>
+        </Flex>
+        <br />
         <Button type="submit" onClick={() => register()} colorScheme="blue">
           Register
         </Button>

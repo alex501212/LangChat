@@ -20,6 +20,7 @@ mongoose.connect(process.env.DATABASE_CONNECTION, () =>
 );
 
 app.use(cors());
+app.use(express.static("userProfileImages"));
 
 const PORT = process.env.PORT || 5000;
 
@@ -61,9 +62,9 @@ io.on("connection", (socket) => {
     }
     io.to(data.userToCall).emit("callUser", {
       signal: data.signalData,
-      from: data.from
+      from: data.from,
     });
-    console.log(accs)
+    console.log(accs);
   });
 
   socket.on("answerCall", (data) => {

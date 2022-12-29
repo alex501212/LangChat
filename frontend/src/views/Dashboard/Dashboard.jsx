@@ -12,6 +12,8 @@ import {
   Text,
   Grid,
   GridItem,
+  Image,
+  Avatar,
 } from "@chakra-ui/react";
 
 const Dashboard = () => {
@@ -42,7 +44,14 @@ const Dashboard = () => {
       <GridItem rowSpan={2} colSpan={1} p={14}>
         <Card background="white" size="lg">
           <CardHeader>
-            <Heading size="xl"> User Information</Heading>
+            <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
+              <Heading size="xl"> User Information</Heading>
+              <Avatar
+                Style="margin-left: auto"
+                size="2xl"
+                src={`http://localhost:5000/${userData.username}_profile_image.jpg`}
+              />
+            </Flex>
           </CardHeader>
           <CardBody>
             <Text fontSize="2xl">Forename: {userData.forename}</Text>
@@ -63,7 +72,6 @@ const Dashboard = () => {
             <br />
             <Text fontSize="2xl">User Since: {userData.signupdate}</Text>
           </CardBody>
-          <CardFooter></CardFooter>
         </Card>
       </GridItem>
       <GridItem colSpan={1} p={14}>
