@@ -5,11 +5,26 @@ const bcrypt = require("bcrypt");
 const { ObjectId } = require("mongodb");
 const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
+const multer = require("multer");
+const path = require("path");
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./userProfileImages/");
+  },
+  filename: function (req, file, cb) {
+    cb(
+      null,
+      req.body.username + "_profile_image" + path.extname(file.originalname)
+    );
+  },
+});
+const upload = multer({ storage: storage });
 
 dotenv.config();
 
 // add new user
-router.post("/register", async (req, res) => {
+router.post("/register", upload.single("profileImage"), async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const password = await bcrypt.hash(req.body.password, salt);
 
@@ -49,7 +64,7 @@ router.get("/users/", (req, res) => {
 // get user by username
 router.get("/profile/:username", (req, res) => {
   registerDetails
-    .findOne({username: req.params.username})
+    .findOne({ username: req.params.username })
     .then((data) => {
       res.json(data);
     })

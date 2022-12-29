@@ -16,6 +16,7 @@ import {
   GridItem,
   Textarea,
   Spinner,
+  Avatar,
 } from "@chakra-ui/react";
 
 const socket = io.connect("http://localhost:5000");
@@ -107,7 +108,8 @@ const Chat = () => {
           let accs2 = [];
           for (let i = 0; i < accs.length; i++) {
             if (
-              accs[i]["userName"] !== userData.username && accs[i]["nativeLang"] === userData.targetLang &&
+              accs[i]["userName"] !== userData.username &&
+              accs[i]["nativeLang"] === userData.targetLang &&
               typeof userData.username !== "undefined"
             ) {
               accs2.push(accs[i]);
@@ -262,10 +264,17 @@ const Chat = () => {
         ) : callAccepted ? (
           <Card background="white" size="lg">
             <CardHeader>
-              <Heading size="lg">
-                You are Connected to {connectedUserData?.username}
-              </Heading>
-              <Heading size="lg"> Say Hello!</Heading>
+              <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
+                <Heading size="lg">
+                  {connectedUserData?.username}
+                </Heading>
+                
+                <Avatar
+                  Style="margin-left: auto"
+                  size="2xl"
+                  src={`http://localhost:5000/${connectedUserData?.username}_profile_image.jpg`}
+                />
+              </Flex>
             </CardHeader>
             <CardBody>
               <Text fontSize="2xl">
