@@ -3,6 +3,7 @@ import Home from "./Home/Home";
 import Search from "./Search/Search";
 import Register from "./Register/Register";
 import Dashboard from "./Dashboard/Dashboard";
+import Chat from "./Chat/Chat";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import NavHeader from "../components/NavHeader";
 
@@ -15,6 +16,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/chat" element={<Chat />} />
         <Route path="/search" element={<Search />} />
         <Route path="*" element={<Navigate to="/home" replace />} />
       </Routes>

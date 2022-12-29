@@ -13,14 +13,12 @@ import {
   Grid,
   GridItem,
 } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
   const [userData, setUserData] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:5000/dashboard", {
+    fetch("http://localhost:5000/profile", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -31,7 +29,6 @@ const Dashboard = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setUserData(data.data);
       });
   }, []);
@@ -86,7 +83,7 @@ const Dashboard = () => {
         <Flex p={14} justifyContent="center" alignItems="center">
           <Button
             type="submit"
-            onClick={() => navigate("/login")}
+            onClick={() => window.location.replace("/chat")}
             colorScheme="blue"
             size="lg"
           >

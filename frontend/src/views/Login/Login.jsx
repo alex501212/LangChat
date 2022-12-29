@@ -9,7 +9,7 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const signIn = () => {
+  const signIn  = () => {
     fetch("http://localhost:5000/login", {
       method: "POST",
       headers: {
@@ -23,7 +23,7 @@ const Login = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.status === "ok") {
-          window.sessionStorage.setItem("token", data.token);
+          sessionStorage.setItem("token", data.token);
           navigate("/dashboard");
         }
       });

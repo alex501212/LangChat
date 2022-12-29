@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Home.scss";
 import { Button, ButtonGroup, Flex } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    sessionStorage.removeItem("token")
+  }, []);
+
   return (
     <div>
       <Flex

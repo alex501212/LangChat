@@ -46,10 +46,10 @@ router.get("/users/", (req, res) => {
     });
 });
 
-// get user by id
-router.get("/users/:id", (req, res) => {
+// get user by username
+router.get("/profile/:username", (req, res) => {
   registerDetails
-    .findById(ObjectId(req.params.id))
+    .findOne({username: req.params.username})
     .then((data) => {
       res.json(data);
     })
@@ -83,7 +83,7 @@ router.post("/login", async (req, res) => {
   res.json({ error: "invalid password" });
 });
 
-router.post("/dashboard", async (req, res) => {
+router.post("/profile", async (req, res) => {
   const { token } = req.body;
   try {
     const user = jwt.verify(token, process.env.JWT_SECRET);
