@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./Chat.scss";
-import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 import Peer from "simple-peer";
 import {
@@ -22,8 +21,6 @@ import {
 const socket = io.connect("http://localhost:5000");
 
 const Chat = () => {
-  const navigate = useNavigate();
-
   const [me, setMe] = useState("");
   const [stream, setStream] = useState();
   const [receivingCall, setReceivingCall] = useState(false);
@@ -265,10 +262,8 @@ const Chat = () => {
           <Card background="white" size="lg">
             <CardHeader>
               <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
-                <Heading size="lg">
-                  {connectedUserData?.username}
-                </Heading>
-                
+                <Heading size="lg">{connectedUserData?.username}</Heading>
+
                 <Avatar
                   Style="margin-left: auto"
                   size="2xl"

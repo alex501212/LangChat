@@ -13,7 +13,6 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
   HStack,
-  FormLabel,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
@@ -31,19 +30,6 @@ const Register = () => {
   const [nativeLang, setNativeLang] = useState("");
   const [targetLang, setTargetLang] = useState("");
   const [profileImage, setProfileImage] = useState("");
-
-  const formValues = {
-    forename: forename,
-    surname: surname,
-    age: age,
-    gender: gender,
-    email: email,
-    username: username,
-    password: passConfirm,
-    nativeLang: nativeLang,
-    targetLang: targetLang,
-    profileImage: profileImage,
-  };
 
   const register = () => {
     const formData = new FormData();

@@ -3,15 +3,17 @@ import Home from "./Home/Home";
 import Search from "./Search/Search";
 import Register from "./Register/Register";
 import Dashboard from "./Dashboard/Dashboard";
+import Admin from "./Admin/Admin";
 import Chat from "./Chat/Chat";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import NavHeader from "../components/NavHeader";
 
 function App() {
   return (
-    <BrowserRouter >
+    <BrowserRouter>
       <NavHeader />
       <Routes>
+        <Route path="/admin" element={<Admin />} />
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

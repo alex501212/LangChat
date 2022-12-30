@@ -99,6 +99,7 @@ const Dashboard = () => {
     setTargetLang(userData.targetLang);
     setOldPassword("");
     setNewPassword("");
+    setDeleteValue("");
 
     onClose();
   };
