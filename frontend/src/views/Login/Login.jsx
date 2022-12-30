@@ -1,15 +1,12 @@
 import React, { useState } from "react";
 import "./Login.scss";
 import { Flex, Input, Heading, Button } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const navigate = useNavigate();
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const signIn  = () => {
+  const signIn = () => {
     fetch("http://localhost:5000/login", {
       method: "POST",
       headers: {
@@ -24,7 +21,7 @@ const Login = () => {
       .then((data) => {
         if (data.status === "ok") {
           sessionStorage.setItem("token", data.token);
-          navigate("/dashboard");
+          window.location.replace("/dashboard");
         }
       });
   };
