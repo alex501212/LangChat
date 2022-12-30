@@ -6,19 +6,17 @@ const { ObjectId } = require("mongodb");
 const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
-const path = require("path");
+const { rename } = require("node:fs");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "./userProfileImages/");
   },
   filename: function (req, file, cb) {
-    cb(
-      null,
-      req.body.username + "_profile_image" + path.extname(file.originalname)
-    );
+    cb(null, req.body.username + "_profile_image.jpg");
   },
 });
+
 const upload = multer({ storage: storage });
 
 dotenv.config();
@@ -113,10 +111,10 @@ router.post("/profile", async (req, res) => {
   } catch (error) {}
 });
 
-// delete user by id
-router.delete("/users/:id", (req, res) => {
+// delete user by username
+router.delete("/users/:username", (req, res) => {
   registerDetails
-    .deleteOne(ObjectId(req.params.id))
+    .deleteOne({ username: req.params.username })
     .then((data) => {
       res.json(data);
     })
@@ -125,33 +123,69 @@ router.delete("/users/:id", (req, res) => {
     });
 });
 
-// update user by id
-router.put("/users/:id", async (req, res) => {
-  let password = req.body.password;
+// update user by username
+router.put(
+  "/users/:username",
+  upload.single("profileImage"),
+  async (req, res) => {
+    const user = await registerDetails.findOne({
+      username: req.params.username,
+    });
 
-  if (req.body.password) {
-    const salt = await bcrypt.genSalt(10);
-    password = await bcrypt.hash(req.body.password, salt);
+    let password = user.password;
+
+    if (req.body.oldPassword && req.body.newPassword) {
+      if (!user) {
+        return res.json({
+          status: "error",
+          error: "specified user does not exist",
+        });
+      }
+      if (await bcrypt.compare(req.body.oldPassword, user.password)) {
+        if (req.body.newPassword) {
+          const salt = await bcrypt.genSalt(10);
+          password = await bcrypt.hash(req.body.newPassword, salt);
+        }
+      } else {
+        return res.json({ error: "invalid password" });
+      }
+    }
+
+    // if username changed, change profile image file name
+    if (req.params.username !== req.body.username) {
+      rename(
+        `userProfileImages/${req.params.username}_profile_image.jpg`,
+        `userProfileImages/${req.body.username}_profile_image.jpg`,
+        (err) => {
+          if (err) throw err;
+        }
+      );
+    }
+
+    registerDetails
+      .updateOne(
+        { username: req.params.username },
+        {
+          $set: {
+            forename: req.body.forename,
+            surname: req.body.surname,
+            age: req.body.age,
+            gender: req.body.gender,
+            password: password,
+            email: req.body.email,
+            username: req.body.username,
+            nativeLang: req.body.nativeLang,
+            targetLang: req.body.targetLang,
+          },
+        }
+      )
+      .then((data) => {
+        res.json(data);
+      })
+      .catch((error) => {
+        res.json(error);
+      });
   }
-
-  registerDetails
-    .updateOne({
-      forename: req.body.forename,
-      surname: req.body.surname,
-      age: req.body.age,
-      gender: req.body.gender,
-      email: req.body.email,
-      username: req.body.username,
-      password: password,
-      nativeLang: req.body.nativeLang,
-      targetLang: req.body.targetLang,
-    })
-    .then((data) => {
-      res.json(data);
-    })
-    .catch((error) => {
-      res.json(error);
-    });
-});
+);
 
 module.exports = router;
