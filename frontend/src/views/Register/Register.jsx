@@ -57,6 +57,7 @@ const Register = () => {
     formData.append("nativeLang", nativeLang);
     formData.append("targetLang", targetLang);
     formData.append("profileImage", profileImage);
+
     fetch("http://localhost:5000/register", {
       method: "POST",
       body: formData,
