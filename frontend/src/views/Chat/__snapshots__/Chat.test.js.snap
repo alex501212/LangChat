@@ -1,0 +1,99 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches snapshot 1`] = `
+<div
+  className="css-5wi36k"
+>
+  <div
+    className="css-1w8f165"
+  >
+    <div
+      className="css-1mamgvs"
+    >
+      <div
+        className="chakra-spinner css-1nk4x4"
+      >
+        <span
+          className="css-8b45rq"
+        >
+          Loading...
+        </span>
+      </div>
+    </div>
+  </div>
+  <div
+    className="css-1azb0ov"
+  >
+    <div
+      className="chakra-card css-1rtzu7b"
+    >
+      <div
+        className="chakra-card__header css-0"
+      >
+        <h2
+          className="chakra-heading css-0"
+        >
+          Finding Users ...
+        </h2>
+      </div>
+      <div
+        className="chakra-card__body css-0"
+      >
+        <div
+          className="css-gmuwbf"
+        >
+          <div
+            className="chakra-spinner css-1nk4x4"
+          >
+            <span
+              className="css-8b45rq"
+            >
+              Loading...
+            </span>
+          </div>
+        </div>
+      </div>
+      <div
+        className="chakra-card__footer css-k008qs"
+      />
+    </div>
+  </div>
+  <div
+    className="css-1pms3ts"
+  >
+    <div
+      className="css-23zkys"
+    >
+      <button
+        className="chakra-button css-4xx2wk"
+        onClick={[Function]}
+        type="button"
+      >
+        Back to Dashboard
+      </button>
+    </div>
+  </div>
+  <div
+    className="css-1pms3ts"
+  >
+    <div
+      className="css-gmuwbf"
+    />
+  </div>
+  <div
+    className="css-1pms3ts"
+  >
+    <div
+      className="css-23zkys"
+    >
+      <button
+        className="chakra-button css-4xx2wk"
+        disabled={true}
+        type="button"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+</div>
+`;

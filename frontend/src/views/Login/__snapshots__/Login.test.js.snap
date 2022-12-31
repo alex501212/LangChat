@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches snapshot 1`] = `
+<div
+  className="css-1muqdga"
+>
+  <div
+    className="css-1pk8ame"
+  >
+    <h2
+      className="chakra-heading css-1r2f04i"
+    >
+      Log in to LangChat
+    </h2>
+    <input
+      className="chakra-input css-r7q7qr"
+      onBlur={[Function]}
+      onChange={[Function]}
+      onFocus={[Function]}
+      placeholder="Username"
+      value=""
+    />
+    <input
+      className="chakra-input css-r7q7qr"
+      onBlur={[Function]}
+      onChange={[Function]}
+      onFocus={[Function]}
+      placeholder="Password"
+      type="password"
+      value=""
+    />
+    <button
+      className="chakra-button css-4xx2wk"
+      onClick={[Function]}
+      type="submit"
+    >
+      Login
+    </button>
+  </div>
+</div>
+`;
