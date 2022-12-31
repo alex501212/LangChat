@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches snapshot 1`] = `
+<div>
+  <div
+    className="css-1b4xnu2"
+  >
+    <div
+      className="chakra-button__group css-goy9dw"
+      data-orientation="horizontal"
+      role="group"
+    >
+      <button
+        className="chakra-button css-1fysbuj"
+        onClick={[Function]}
+        type="button"
+      >
+        Login
+      </button>
+      <button
+        className="chakra-button css-1fysbuj"
+        onClick={[Function]}
+        type="button"
+      >
+        Register
+      </button>
+    </div>
+  </div>
+</div>
+`;

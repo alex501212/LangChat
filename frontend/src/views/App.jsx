@@ -1,6 +1,5 @@
 import Login from "./Login/Login";
 import Home from "./Home/Home";
-import Search from "./Search/Search";
 import Register from "./Register/Register";
 import Dashboard from "./Dashboard/Dashboard";
 import Admin from "./Admin/Admin";
@@ -19,7 +18,6 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/chat" element={<Chat />} />
-        <Route path="/search" element={<Search />} />
         <Route path="*" element={<Navigate to="/home" replace />} />
       </Routes>
     </BrowserRouter>
