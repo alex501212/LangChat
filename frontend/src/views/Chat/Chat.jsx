@@ -211,7 +211,7 @@ const Chat = () => {
               playsInline
               ref={userVideo}
               autoPlay
-              style={{ width: "900px" }}
+              style={{ width: "800px" }}
             />
           </Flex>
         ) : receivingCall && !callAccepted ? (
