@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const registerDetails = require("../models/RegisterModels");
 const bcrypt = require("bcrypt");
-const { ObjectId } = require("mongodb");
 const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");

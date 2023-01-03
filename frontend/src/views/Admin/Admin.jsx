@@ -33,16 +33,10 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
-  TableCaption,
   TableContainer,
-  Fade,
-  ScaleFade,
-  Slide,
-  SlideFade,
 } from "@chakra-ui/react";
 import { AiFillEdit } from "react-icons/ai";
 

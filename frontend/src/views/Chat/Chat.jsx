@@ -13,7 +13,6 @@ import {
   Text,
   Grid,
   GridItem,
-  Textarea,
   Spinner,
   Avatar,
 } from "@chakra-ui/react";
@@ -115,7 +114,6 @@ const Chat = () => {
           if (accs2.length > 0) {
             const randomId = accs2[Math.floor(Math.random() * accs2.length)];
             setIdToCall(randomId.clientId);
-            // found never gets set
             found = true;
 
             fetch(`http://localhost:5000/profile/${randomId.userName}`, {

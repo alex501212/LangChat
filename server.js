@@ -47,7 +47,6 @@ io.on("connection", (socket) => {
     }
 
     accs.push(account);
-    console.log(accs);
   });
 
   socket.on("randomId", () => {
@@ -64,7 +63,6 @@ io.on("connection", (socket) => {
       signal: data.signalData,
       from: data.from,
     });
-    console.log(accs);
   });
 
   socket.on("answerCall", (data) => {
