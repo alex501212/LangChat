@@ -92,12 +92,14 @@ cron.schedule("*/15 * * * * *", () => {
       }
     }
     matchedUsers = Array.from(matchedUsersUnique);
-    for (let i = 0; i < matchedUsers.length; i++) {
-      io.to(matchedUsers[i]["sender"]).emit(
-        "matchedUser",
-        matchedUsers[i]["reciever"],
-        matchedUsers[i]["recieverId"]
-      );
+    if (matchedUsers.length > 1) {
+      for (let i = 0; i < matchedUsers.length; i++) {
+        io.to(matchedUsers[i]["sender"]).emit(
+          "matchedUser",
+          matchedUsers[i]["reciever"],
+          matchedUsers[i]["recieverId"]
+        );
+      }
     }
   }
 });
