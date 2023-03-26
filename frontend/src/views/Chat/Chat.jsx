@@ -89,52 +89,20 @@ const Chat = () => {
   }, []);
 
   useEffect(() => {
-    let isFound = false;
-    let accs = [];
-    socket.on("users", (acc) => {
-      accs = acc;
+    socket.on("matchedUser", (user, id) => {
+      fetch(`http://localhost:5000/profile/${user}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setIdToCall(id);
+          setConnectedUserData(data);
+        });
     });
-
-    if (!userData) return;
-    function search(found) {
-      if (found === false) {
-        setTimeout(function () {
-          socket.emit("randomId");
-          // get random id to call
-          let accs2 = [];
-          for (let i = 0; i < accs.length; i++) {
-            if (
-              accs[i]["userName"] !== userData.username &&
-              accs[i]["nativeLang"] === userData.targetLang &&
-              typeof userData.username !== "undefined"
-            ) {
-              accs2.push(accs[i]);
-            }
-          }
-          if (accs2.length > 0) {
-            const randomId = accs2[Math.floor(Math.random() * accs2.length)];
-            setIdToCall(randomId.clientId);
-            found = true;
-
-            fetch(`http://localhost:5000/profile/${randomId.userName}`, {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            })
-              .then((res) => res.json())
-              .then((data) => {
-                setConnectedUserData(data);
-              });
-            return;
-          } else {
-            search(found);
-          }
-        }, 2000);
-      }
-    }
-    search(isFound);
-  }, [userData]);
+  }, []);
 
   useEffect(() => {
     if (!idToCall) return;
