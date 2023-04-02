@@ -62,6 +62,10 @@ io.on("connection", (socket) => {
     });
   });
 
+  socket.on("buttonAction", (caller) => {
+    io.to(caller).emit("buttonAction");
+  });
+
   socket.on("answerCall", (data) => {
     io.to(data.to).emit("callAccepted", data.signal);
   });
@@ -77,21 +81,71 @@ cron.schedule("*/15 * * * * *", () => {
   if (accs.length > 1) {
     const matchedUsersUnique = new Set();
     // constantly try to match users
+    const matchedSenders = [];
+    const matchedRecievers = [];
+    const matchedRecieverIds = [];
+
     for (let i = 0; i < accs.length; i++) {
       for (let x = 0; x < accs.length; x++) {
         if (
           accs[i]["userName"] !== accs[x]["userName"] &&
           accs[i]["nativeLang"] === accs[x]["targetLang"]
         ) {
-          matchedUsersUnique.add({
-            sender: accs[i]["clientId"],
-            reciever: accs[x]["userName"],
-            recieverId: accs[x]["clientId"],
-          });
+          let iFilterCount = 0;
+          let xFilterCount = 0;
+          let totalFilters = 0; // filters that are both true in i and y
+          let curr_i = accs[i]["filters"];
+          let curr_x = accs[x]["filters"];
+          for (let key in curr_i) {
+            if (curr_i[key] === true) {
+              iFilterCount++;
+            }
+            if (curr_x[key] === true) {
+              xFilterCount++;
+            }
+            if (curr_i[key] === true && curr_x[key] === true) {
+              totalFilters++;
+            }
+          }
+
+          // if account i and x have more 0 matching filters
+          if (
+            totalFilters > 0 &&
+            !matchedSenders.includes(accs[i]["clientId"]) &&
+            !matchedRecievers.includes(accs[x]["userName"]) &&
+            !matchedRecieverIds.includes(accs[x]["clientId"])
+          ) {
+            matchedUsersUnique.add({
+              sender: accs[i]["clientId"],
+              reciever: accs[x]["userName"],
+              recieverId: accs[x]["clientId"],
+            });
+            matchedSenders.push(accs[i]["clientId"]);
+            matchedRecievers.push(accs[x]["userName"]);
+            matchedRecieverIds.push(accs[x]["clientId"]);
+          } else if (
+            // if accounts i or x have 0 filters selected
+            totalFilters === 0 &&
+            iFilterCount === 0 &&
+            xFilterCount === 0 &&
+            !matchedSenders.includes(accs[i]["clientId"]) &&
+            !matchedRecievers.includes(accs[x]["userName"]) &&
+            !matchedRecieverIds.includes(accs[x]["clientId"])
+          ) {
+            matchedUsersUnique.add({
+              sender: accs[i]["clientId"],
+              reciever: accs[x]["userName"],
+              recieverId: accs[x]["clientId"],
+            });
+            matchedSenders.push(accs[i]["clientId"]);
+            matchedRecievers.push(accs[x]["userName"]);
+            matchedRecieverIds.push(accs[x]["clientId"]);
+          }
         }
       }
     }
     matchedUsers = Array.from(matchedUsersUnique);
+
     if (matchedUsers.length > 1) {
       for (let i = 0; i < matchedUsers.length; i++) {
         io.to(matchedUsers[i]["sender"]).emit(
