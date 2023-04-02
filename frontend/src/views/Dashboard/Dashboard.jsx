@@ -31,6 +31,8 @@ import {
   NumberDecrementStepper,
   HStack,
   Tooltip,
+  Stack,
+  Checkbox,
 } from "@chakra-ui/react";
 import { AiFillEdit } from "react-icons/ai";
 
@@ -53,6 +55,20 @@ const Dashboard = () => {
   );
   const [avatarHovered, setAvatarHovered] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [filters, setFilters] = useState({});
+  const [filtersLoaded, setFiltersLoaded] = useState(false);
+
+  const filterHandler = (filter) => {
+    if (filters[filter] === false) {
+      filters[filter] = true;
+    } else {
+      filters[filter] = false;
+    }
+  };
+
+  const submitFilters = () => {
+    sessionStorage["filters"] = JSON.stringify(filters);
+  };
 
   const editProfile = () => {
     const formData = new FormData();
@@ -103,6 +119,31 @@ const Dashboard = () => {
 
     onClose();
   };
+
+  useEffect(() => {
+    const fitlersToLoad = JSON.parse(sessionStorage.getItem("filters")) || {
+      "reading": false,
+      "food": false,
+      "music": false,
+      "movies": false,
+      "tv": false,
+      "sports": false,
+      "gym": false,
+      "cats": false,
+      "dogs": false,
+      "video games": false,
+      "travel": false,
+      "male": false,
+      "female": false,
+      "other": false,
+      "18-25": false,
+      "25-30": false,
+      "30-40": false,
+      "60+": false,
+    };
+    setFilters(fitlersToLoad);
+    setFiltersLoaded(true);
+  }, []);
 
   useEffect(() => {
     fetch("http://localhost:5000/profile", {
@@ -391,9 +432,205 @@ const Dashboard = () => {
             <Heading size="xl"> Filters</Heading>
           </CardHeader>
           <CardBody>
-            <Text fontSize="2xl">
+            <Text fontSize="xl">
               Matching you with native {userData.targetLang} speakers
             </Text>
+            <br />
+            <hr />
+            <br />
+            <Text fontSize="lg">Interests</Text>
+            <Stack spacing={4} direction="row" align="center">
+              {filtersLoaded && (
+                <Checkbox
+                  defaultChecked={filters["reading"]}
+                  value="reading"
+                  onChange={(e) => filterHandler(e.target.value)}
+                >
+                  Reading
+                </Checkbox>
+              )}
+              {filtersLoaded && (
+                <Checkbox
+                  defaultChecked={filters["food"]}
+                  value="food"
+                  onChange={(e) => filterHandler(e.target.value)}
+                >
+                  Food
+                </Checkbox>
+              )}
+              {filtersLoaded && (
+                <Checkbox
+                  defaultChecked={filters["music"]}
+                  value="music"
+                  onChange={(e) => filterHandler(e.target.value)}
+                >
+                  Music
+                </Checkbox>
+              )}
+              {filtersLoaded && (
+                <Checkbox
+                  defaultChecked={filters["movies"]}
+                  value="movies"
+                  onChange={(e) => filterHandler(e.target.value)}
+                >
+                  Movies
+                </Checkbox>
+              )}
+              {filtersLoaded && (
+                <Checkbox
+                  defaultChecked={filters["tv"]}
+                  value="tv"
+                  onChange={(e) => filterHandler(e.target.value)}
+                >
+                  TV
+                </Checkbox>
+              )}
+              {filtersLoaded && (
+                <Checkbox
+                  defaultChecked={filters["sports"]}
+                  value="sports"
+                  onChange={(e) => filterHandler(e.target.value)}
+                >
+                  Sports
+                </Checkbox>
+              )}
+              {filtersLoaded && (
+                <Checkbox
+                  defaultChecked={filters["gym"]}
+                  value="gym"
+                  onChange={(e) => filterHandler(e.target.value)}
+                >
+                  Gym
+                </Checkbox>
+              )}
+              {filtersLoaded && (
+                <Checkbox
+                  defaultChecked={filters["cats"]}
+                  value="cats"
+                  onChange={(e) => filterHandler(e.target.value)}
+                >
+                  Cats
+                </Checkbox>
+              )}
+              {filtersLoaded && (
+                <Checkbox
+                  defaultChecked={filters["dogs"]}
+                  value="dogs"
+                  onChange={(e) => filterHandler(e.target.value)}
+                >
+                  Dogs
+                </Checkbox>
+              )}
+            </Stack>
+            <Stack spacing={4} direction="row" align="center">
+              {filtersLoaded && (
+                <Checkbox
+                  defaultChecked={filters["video games"]}
+                  value="video games"
+                  onChange={(e) => filterHandler(e.target.value)}
+                >
+                  Video Games
+                </Checkbox>
+              )}
+              {filtersLoaded && (
+                <Checkbox
+                  defaultChecked={filters["travel"]}
+                  value="travel"
+                  onChange={(e) => filterHandler(e.target.value)}
+                >
+                  Travel
+                </Checkbox>
+              )}
+            </Stack>
+            <br />
+            <Text fontSize="lg">Gender</Text>
+            <Stack spacing={4} direction="row" align="center">
+              {filtersLoaded && (
+                <Checkbox
+                  defaultChecked={filters["male"]}
+                  value="male"
+                  onChange={(e) => filterHandler(e.target.value)}
+                >
+                  Male
+                </Checkbox>
+              )}
+              {filtersLoaded && (
+                <Checkbox
+                  defaultChecked={filters["female"]}
+                  value="female"
+                  onChange={(e) => filterHandler(e.target.value)}
+                >
+                  Female
+                </Checkbox>
+              )}
+              {filtersLoaded && (
+                <Checkbox
+                  defaultChecked={filters["other"]}
+                  value="other"
+                  onChange={(e) => filterHandler(e.target.value)}
+                >
+                  Other
+                </Checkbox>
+              )}
+            </Stack>
+            <br />
+            <Text fontSize="lg">Age</Text>
+            <Stack spacing={4} direction="row" align="center">
+              {filtersLoaded && (
+                <Checkbox
+                  defaultChecked={filters["18-25"]}
+                  value="18-25"
+                  onChange={(e) => filterHandler(e.target.value)}
+                >
+                  18-25
+                </Checkbox>
+              )}
+              {filtersLoaded && (
+                <Checkbox
+                  defaultChecked={filters["25-30"]}
+                  value="25-30"
+                  onChange={(e) => filterHandler(e.target.value)}
+                >
+                  25-30
+                </Checkbox>
+              )}
+              {filtersLoaded && (
+                <Checkbox
+                  defaultChecked={filters["30-40"]}
+                  value="30-40"
+                  onChange={(e) => filterHandler(e.target.value)}
+                >
+                  30-40
+                </Checkbox>
+              )}
+              {filtersLoaded && (
+                <Checkbox
+                  defaultChecked={filters["40-60"]}
+                  value="40-60"
+                  onChange={(e) => filterHandler(e.target.value)}
+                >
+                  40-60
+                </Checkbox>
+              )}
+              {filtersLoaded && (
+                <Checkbox
+                  defaultChecked={filters["60+"]}
+                  value="60+"
+                  onChange={(e) => filterHandler(e.target.value)}
+                >
+                  60+
+                </Checkbox>
+              )}
+            </Stack>
+            <br />
+            <Button
+              type="submit"
+              colorScheme="blue"
+              size="sm"
+              onClick={() => submitFilters()}
+            >
+              Apply Filters
+            </Button>
           </CardBody>
           <CardFooter></CardFooter>
         </Card>

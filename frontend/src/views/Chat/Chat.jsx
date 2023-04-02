@@ -72,6 +72,26 @@ const Chat = () => {
             clientId: id,
             nativeLang: data.data.nativeLang,
             targetLang: data.data.targetLang,
+            filters: JSON.parse(sessionStorage.getItem("filters")) || {
+              "reading": false,
+              "food": false,
+              "music": false,
+              "movies": false,
+              "tv": false,
+              "sports": false,
+              "gym": false,
+              "cats": false,
+              "dogs": false,
+              "video games": false,
+              "travel": false,
+              "male": false,
+              "female": false,
+              "other": false,
+              "18-25": false,
+              "25-30": false,
+              "30-40": false,
+              "60+": false,
+            }
           };
 
           // add user to queue
@@ -102,6 +122,12 @@ const Chat = () => {
           setConnectedUserData(data);
         });
     });
+
+    socket.on("buttonAction", () => {
+      setCallEnded(true)
+      setCallAccepted(true)
+      setReceivingCall(false)
+    })
   }, []);
 
   useEffect(() => {
@@ -156,6 +182,16 @@ const Chat = () => {
     peer.signal(callerSignal);
     connectionRef.current = peer;
   };
+
+  const nextActionHandler = () => {
+    socket.emit("buttonAction", caller);
+    window.location.replace("/chat")
+  }
+
+  const backActionHandler = () => {
+    socket.emit("buttonAction", caller);
+    window.location.replace("/dashboard")
+  }
 
   return (
     <Grid
@@ -280,7 +316,7 @@ const Chat = () => {
           {callAccepted && !callEnded ? (
             <Button
               colorScheme="blue"
-              onClick={() => window.location.replace("/dashboard")}
+              onClick={() => backActionHandler()}
               size="lg"
             >
               Back to Dashboard
@@ -288,7 +324,7 @@ const Chat = () => {
           ) : (
             <Button
               colorScheme="blue"
-              onClick={() => window.location.replace("/dashboard")}
+              onClick={() => backActionHandler()}
               size="lg"
             >
               Back to Dashboard
@@ -314,7 +350,7 @@ const Chat = () => {
           {callAccepted || callEnded || receivingCall ? (
             <Button
               colorScheme="blue"
-              onClick={() => window.location.replace("/chat")}
+              onClick={() => nextActionHandler()}
               size="lg"
             >
               Next
