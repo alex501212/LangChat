@@ -112,10 +112,10 @@ router.post("/login", async (req, res) => {
     if (res.status(201)) {
       return res.json({ status: "ok", token: token });
     } else {
-      return res.json({ status: "error", error: "Invalid password" });
+      return res.json({ status: "error", message: "Invalid password" });
     }
   }
-  res.json({ error: "Invalid password" });
+  res.json({ message: "Invalid password" });
 });
 
 router.post("/profile", async (req, res) => {
