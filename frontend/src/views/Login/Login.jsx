@@ -1,42 +1,63 @@
 import React, { useState } from "react";
 import "./Login.scss";
-import { Flex, Input, Heading, Button, useToast } from "@chakra-ui/react";
+import {
+  Flex,
+  Input,
+  Heading,
+  Button,
+  useToast,
+  InputGroup,
+  InputRightElement,
+} from "@chakra-ui/react";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPass, setShowPass] = useState(false);
+
   const toast = useToast();
 
+  const handleHideToggle = () => setShowPass(!showPass);
+
   const signIn = () => {
-    fetch("http://localhost:5000/login", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        username: username,
-        password: password,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.status === "ok") {
-          sessionStorage.setItem("token", data.token);
-          window.location.replace("/dashboard");
-        } else {
-          toast({
-            title: data.status,
-            description: data.message,
-            status: "error",
-            duration: 9000,
-            isClosable: true,
-            containerStyle: {
-              width: "500px",
-              maxWidth: "100%",
-            },
-          });
-        }
+    if (username !== "") {
+      fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === "ok") {
+            sessionStorage.setItem("token", data.token);
+            window.location.replace("/dashboard");
+          } else {
+            console.log(data)
+            toast({
+              description: data.message,
+              status: "error",
+              duration: 9000,
+              isClosable: true,
+              containerStyle: {
+                width: "500px",
+                maxWidth: "100%",
+              },
+            });
+          }
+        });
+    } else {
+      toast({
+        description: "Invalid username or password",
+        status: "error",
+        duration: 1000,
+        isClosable: true,
       });
+    }
   };
 
   return (
@@ -57,16 +78,35 @@ const Login = () => {
         <Input
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              signIn();
+            }
+          }}
           mb={5}
           placeholder="Username"
         />
-        <Input
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          mb={5}
-          type={"password"}
-          placeholder="Password"
-        />
+
+        <InputGroup size="md">
+          <Input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                signIn();
+              }
+            }}
+            mb={5}
+            type={showPass ? "text" : "password"}
+            placeholder="Password"
+          />
+          <InputRightElement width="4.5rem">
+            <Button h="1.75rem" size="sm" onClick={handleHideToggle}>
+              {showPass ? "Hide" : "Show"}
+            </Button>
+          </InputRightElement>
+        </InputGroup>
+
 
         <Button type="submit" onClick={() => signIn()} colorScheme="blue">
           Login

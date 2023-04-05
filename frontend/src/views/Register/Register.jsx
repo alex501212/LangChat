@@ -13,6 +13,9 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
   HStack,
+  useToast,
+  InputGroup,
+  InputRightElement,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
@@ -30,34 +33,196 @@ const Register = () => {
   const [nativeLang, setNativeLang] = useState("");
   const [targetLang, setTargetLang] = useState("");
   const [profileImage, setProfileImage] = useState("");
+  const [showPass, setShowPass] = useState(false);
+
+  const toast = useToast();
 
   const register = () => {
-    const formData = new FormData();
-    formData.append("forename", forename);
-    formData.append("surname", surname);
-    formData.append("age", age);
-    formData.append("gender", gender);
-    formData.append("email", email);
-    formData.append("username", username);
-    formData.append("password", passConfirm);
-    formData.append("nativeLang", nativeLang);
-    formData.append("targetLang", targetLang);
-    formData.append("profileImage", profileImage);
-
-    fetch("http://localhost:5000/register", {
-      method: "POST",
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        navigate("/login");
+    if (!forename.match(/^[A-Za-z]+$/) && forename !== "") {
+      toast({
+        description: "Forename must contain alphabetical characters only",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
       });
+      return;
+    }
+
+    if (!surname.match(/^[A-Za-z]+$/) && surname !== "") {
+      toast({
+        description: "Surname must contain alphabetical characters only",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (gender === "") {
+      toast({
+        description: "Select a valid gender",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (
+      !email.match(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/) &&
+      email !== ""
+    ) {
+      toast({
+        description: "Enter a valid email address",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (username.length < 4) {
+      toast({
+        description: "Username must be at least 4 characters long",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (password.length < 8 && password !== "") {
+      toast({
+        description: "Your password must be 8 characters or more",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (
+      (!password.match(/[a-z]/) || !password.match(/[A-Z]/)) &&
+      password !== ""
+    ) {
+      toast({
+        description:
+          "Your password must contain uppercase and lowercase characters",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (!password.match(/[0-9]/) && password !== "") {
+      toast({
+        description: "Your password must contain at least one number",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (passConfirm !== password && (password !== "" || passConfirm !== "")) {
+      toast({
+        description: "Passwords are not matching",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (nativeLang === "") {
+      toast({
+        description: "Please select a valid native language",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (targetLang === "") {
+      toast({
+        description: "Please select a valid target language",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (targetLang === nativeLang) {
+      toast({
+        description:
+          "Your target language cannot be the same as your native language",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (
+      forename !== "" &&
+      surname !== "" &&
+      gender !== "" &&
+      email !== "" &&
+      username !== "" &&
+      password !== "" &&
+      passConfirm !== "" &&
+      nativeLang !== "" &&
+      targetLang !== "" &&
+      profileImage !== ""
+    ) {
+      const formData = new FormData();
+      formData.append("forename", forename);
+      formData.append("surname", surname);
+      formData.append("age", age);
+      formData.append("gender", gender);
+      formData.append("email", email);
+      formData.append("username", username);
+      formData.append("password", passConfirm);
+      formData.append("nativeLang", nativeLang);
+      formData.append("targetLang", targetLang);
+      formData.append("profileImage", profileImage);
+
+      fetch("http://localhost:5000/register", {
+        method: "POST",
+        body: formData,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === "error") {
+            toast({
+              description: data.error,
+              status: "error",
+              duration: 2000,
+              isClosable: true,
+            });
+          } else {
+            navigate("/login");
+          }
+        });
+    } else {
+      toast({
+        description: "Please fill in all fields",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+    }
   };
 
   const hiddenFileInput = React.useRef(null);
   const uploadFile = (event) => {
     hiddenFileInput.current.click();
   };
+
+  const handleHideToggle = () => setShowPass(!showPass);
 
   return (
     <Flex
@@ -93,7 +258,7 @@ const Register = () => {
             mb={5}
             step={1}
             defaultValue={18}
-            min={1}
+            min={18}
             max={100}
             allowMouseWheel
             onChange={setAge}
@@ -129,13 +294,20 @@ const Register = () => {
           mb={5}
           placeholder="Username"
         />
-        <Input
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          mb={5}
-          type={"password"}
-          placeholder="Password"
-        />
+        <InputGroup size="md">
+          <Input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            mb={5}
+            type={showPass ? "text" : "password"}
+            placeholder="Password"
+          />
+          <InputRightElement width="4.5rem">
+            <Button h="1.75rem" size="sm" onClick={handleHideToggle}>
+              {showPass ? "Hide" : "Show"}
+            </Button>
+          </InputRightElement>
+        </InputGroup>
         <Input
           value={passConfirm}
           onChange={(e) => setPassConfirm(e.target.value)}
