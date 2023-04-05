@@ -37,6 +37,18 @@ router.post("/register", upload.single("profileImage"), async (req, res) => {
     nativeLang: req.body.nativeLang,
     targetLang: req.body.targetLang,
   });
+
+  const user = await registerDetails.findOne({
+    username: req.body.username,
+  });
+
+  if(user !== null) {
+    return res.json({
+      status: "error",
+      error: "Username is already taken",
+    });
+  }
+
   newUser
     .save()
     .then((data) => {
@@ -79,7 +91,7 @@ router.post("/login", async (req, res) => {
   if (!user) {
     return res.json({
       status: "error",
-      error: "specified user does not exist",
+      error: "Invalid username",
     });
   }
 
@@ -88,6 +100,7 @@ router.post("/login", async (req, res) => {
   
   if(user.banEndDate !== null && user.banEndDate > currentDate) { // or ban date hasnt passed
     const formattedDate = user.banEndDate.toUTCString();
+    console.log(formattedDate)
     return res.json({ status: "User Banned", message: `You are banned from accessing LangChat's services until ${formattedDate}` });
   }
 
@@ -99,10 +112,10 @@ router.post("/login", async (req, res) => {
     if (res.status(201)) {
       return res.json({ status: "ok", token: token });
     } else {
-      return res.json({ status: "error", error: "error" });
+      return res.json({ status: "error", error: "Invalid password" });
     }
   }
-  res.json({ error: "invalid password" });
+  res.json({ error: "Invalid password" });
 });
 
 router.post("/profile", async (req, res) => {
@@ -147,7 +160,7 @@ router.put(
       if (!user) {
         return res.json({
           status: "error",
-          error: "specified user does not exist",
+          error: "Specified user does not exist",
         });
       }
       if (await bcrypt.compare(req.body.oldPassword, user.password)) {
@@ -156,7 +169,7 @@ router.put(
           password = await bcrypt.hash(req.body.newPassword, salt);
         }
       } else {
-        return res.json({ error: "invalid password" });
+        return res.json({ error: "Invalid password" });
       }
     }
 
@@ -240,9 +253,6 @@ router.put("/ban/:username", async (req, res) => {
       {
         $set: {
           banEndDate: banEndDate,
-        },
-        $inc: {
-          banCount: 1,
         },
       }
     )

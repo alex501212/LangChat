@@ -8,6 +8,7 @@ const Login = () => {
   const toast = useToast();
 
   const signIn = () => {
+    if(username !== "") {
     fetch("http://localhost:5000/login", {
       method: "POST",
       headers: {
@@ -25,18 +26,25 @@ const Login = () => {
           window.location.replace("/dashboard");
         } else {
           toast({
-            title: data.status,
             description: data.message,
             status: "error",
             duration: 9000,
             isClosable: true,
             containerStyle: {
               width: "500px",
-              maxWidth: "100%",
+              maxWidth: "100%"
             },
           });
         }
       });
+    } else {
+      toast({
+        description: "Invalid username or password",
+        status: "error",
+        duration: 1000,
+        isClosable: true,
+      });
+    }
   };
 
   return (
@@ -57,12 +65,22 @@ const Login = () => {
         <Input
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              signIn();
+            }
+          }}
           mb={5}
           placeholder="Username"
         />
         <Input
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              signIn();
+            }
+          }}
           mb={5}
           type={"password"}
           placeholder="Password"

@@ -33,6 +33,9 @@ import {
   Tooltip,
   Stack,
   Checkbox,
+  useToast,
+  InputGroup,
+  InputRightElement,
 } from "@chakra-ui/react";
 import { AiFillEdit } from "react-icons/ai";
 
@@ -57,6 +60,9 @@ const Dashboard = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [filters, setFilters] = useState({});
   const [filtersLoaded, setFiltersLoaded] = useState(false);
+  const [showPass, setShowPass] = useState(false);
+
+  const toast = useToast();
 
   const filterHandler = (filter) => {
     if (filters[filter] === false) {
@@ -70,7 +76,147 @@ const Dashboard = () => {
     sessionStorage["filters"] = JSON.stringify(filters);
   };
 
+  const fieldChanged =
+    forename !== userData.forename ||
+    surname !== userData.surname ||
+    gender !== userData.gender ||
+    age !== userData.age ||
+    email !== userData.email ||
+    username !== userData.username ||
+    (oldPassword !== "" && newPassword !== "") ||
+    nativeLang !== userData.nativeLang ||
+    targetLang !== userData.targetLang ||
+    profileImage !== "";
+
   const editProfile = () => {
+    if (!forename.match(/^[A-Za-z]+$/) && forename !== "") {
+      toast({
+        description: "Forename must contain alphabetical characters only",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (!surname.match(/^[A-Za-z]+$/) && surname !== "") {
+      toast({
+        description: "Surname must contain alphabetical characters only",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (gender === "") {
+      toast({
+        description: "Select a valid gender",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (
+      !email.match(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/) &&
+      email !== ""
+    ) {
+      toast({
+        description: "Enter a valid email address",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (oldPassword === newPassword) {
+      toast({
+        description: "Passwords are not different",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (username.length < 4) {
+      toast({
+        description: "Username must be at least 4 characters long",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (newPassword.length < 8 && newPassword !== "") {
+      toast({
+        description: "Your new password must be 8 characters or more",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (
+      (!newPassword.match(/[a-z]/) || !newPassword.match(/[A-Z]/)) &&
+      newPassword !== ""
+    ) {
+      toast({
+        description:
+          "Your new password must contain uppercase and lowercase characters",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (!newPassword.match(/[0-9]/) && newPassword !== "") {
+      toast({
+        description: "Your new password must contain at least one number",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (nativeLang === "") {
+      toast({
+        description: "Please select a valid native language",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (targetLang === "") {
+      toast({
+        description: "Please select a valid target language",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (targetLang === nativeLang) {
+      toast({
+        description:
+          "Your target language cannot be the same as your native language",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+
     const formData = new FormData();
     formData.append("forename", forename);
     formData.append("surname", surname);
@@ -93,6 +239,13 @@ const Dashboard = () => {
         if (username !== userData.username) {
           sessionStorage.removeItem("token");
           window.location.replace("/login");
+        } else if (data.error) {
+          toast({
+            description: data.error,
+            status: "error",
+            duration: 2000,
+            isClosable: true,
+          });
         } else {
           window.location.reload();
         }
@@ -158,7 +311,6 @@ const Dashboard = () => {
       .then((res) => res.json())
       .then((data) => {
         setUserData(data.data);
-
         setForename(data.data.forename);
         setSurname(data.data.surname);
         setAge(data.data.age);
@@ -192,6 +344,8 @@ const Dashboard = () => {
         window.location.replace("/home");
       });
   };
+
+  const handleHideToggle = () => setShowPass(!showPass);
 
   return (
     <Grid
@@ -309,13 +463,24 @@ const Dashboard = () => {
                       mb={5}
                       placeholder="Username"
                     />
-                    <Input
-                      value={oldPassword}
-                      onChange={(e) => setOldPassword(e.target.value)}
-                      mb={5}
-                      type={"password"}
-                      placeholder="Old Password"
-                    />
+                    <InputGroup size="md">
+                      <Input
+                        value={oldPassword}
+                        onChange={(e) => setOldPassword(e.target.value)}
+                        mb={5}
+                        type={showPass ? "text" : "password"}
+                        placeholder="Old Password"
+                      />
+                      <InputRightElement width="4.5rem">
+                        <Button
+                          h="1.75rem"
+                          size="sm"
+                          onClick={handleHideToggle}
+                        >
+                          {showPass ? "Hide" : "Show"}
+                        </Button>
+                      </InputRightElement>
+                    </InputGroup>
                     <Input
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
@@ -383,6 +548,7 @@ const Dashboard = () => {
                       variant="ghost"
                       mr={3}
                       onClick={() => editProfile()}
+                      disabled={!fieldChanged}
                     >
                       Confirm Changes
                     </Button>
