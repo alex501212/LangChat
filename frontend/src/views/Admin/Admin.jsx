@@ -37,10 +37,13 @@ import {
   Th,
   Td,
   TableContainer,
+  useToast,
 } from "@chakra-ui/react";
 import { AiFillEdit } from "react-icons/ai";
 
 const Admin = () => {
+  const [userToBan, setUserToBan] = useState("");
+  const [reportId, setReportId] = useState("");
   const [forename, setForename] = useState("");
   const [surname, setSurname] = useState("");
   const [age, setAge] = useState(18);
@@ -54,13 +57,25 @@ const Admin = () => {
   const [profileImage, setProfileImage] = useState("");
   const [userData, setUserData] = useState("");
   const [userList, setUserList] = useState([]);
+  const [reportList, setReportList] = useState([]);
   const [itemSelected, setItemSelected] = useState("");
+  const [itemSelectedModal, setItemSelectedModal] = useState("");
   const [deleteValue, setDeleteValue] = useState("");
   const [avatarStyle, setAvatarStyle] = useState(
     "margin-left: auto; opacity: 100%;"
   );
   const [avatarHovered, setAvatarHovered] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isReportsOpen,
+    onOpen: onReportsOpen,
+    onClose: onReportsClose,
+  } = useDisclosure();
+  const {
+    isOpen: isUserEditOpen,
+    onOpen: onUserEditOpen,
+    onClose: onUserEditClose,
+  } = useDisclosure();
+  const [banLength, setBanLength] = useState("1");
 
   useEffect(() => {
     fetch("http://localhost:5000/users", {
@@ -74,6 +89,17 @@ const Admin = () => {
         setUserList(data);
         setSelectedUser(data[0]);
         setItemSelected(0);
+      });
+
+    fetch("http://localhost:5000/reports", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setReportList(data);
       });
   }, []);
 
@@ -95,7 +121,7 @@ const Admin = () => {
     setNewPassword("");
     setDeleteValue("");
 
-    onClose();
+    onUserEditClose();
   };
 
   const hoverAvatarEnter = () => {
@@ -174,8 +200,48 @@ const Admin = () => {
     setOldPassword("");
     setNewPassword("");
     setDeleteValue("");
-
     setItemSelected(index);
+  };
+
+  const setReportedUser = (report, index) => {
+    setReportId(report._id);
+    setUserToBan(report.reportedUser);
+    setItemSelectedModal(index);
+  };
+
+  const toast = useToast();
+
+  const banUserHandler = () => {
+    fetch(`http://localhost:5000/ban/${userToBan}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        banLength: banLength,
+        reportId: reportId,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        onReportsClose();
+        toast({
+          title: "User Banned.",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+        fetch("http://localhost:5000/reports", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            setReportList(data);
+          });
+      });
   };
 
   return (
@@ -198,7 +264,7 @@ const Admin = () => {
                   onMouseLeave={() => hoverAvatarLeave()}
                   size="2xl"
                   src={`http://localhost:5000/${userData.username}_profile_image.jpg`}
-                  onClick={() => onOpen()}
+                  onClick={() => onUserEditOpen()}
                 />
                 {avatarHovered ? (
                   <Icon
@@ -214,7 +280,7 @@ const Admin = () => {
                       zIndex: 1,
                       cursor: "pointer",
                     }}
-                    onClick={() => onOpen()}
+                    onClick={() => onUserEditOpen()}
                   />
                 ) : (
                   <Icon
@@ -230,7 +296,7 @@ const Admin = () => {
                     }}
                   />
                 )}
-                <Modal isOpen={isOpen} onClose={() => closeModal()}>
+                <Modal isOpen={isUserEditOpen} onClose={() => closeModal()}>
                   <ModalOverlay />
                   <ModalContent>
                     <ModalHeader>Edit Profile</ModalHeader>
@@ -449,7 +515,96 @@ const Admin = () => {
                 </Table>
               </TableContainer>
             </CardBody>
-            <CardFooter></CardFooter>
+            <CardFooter>
+              <Button colorScheme="red" onClick={() => onReportsOpen()}>
+                View All User Reports
+              </Button>
+              <Modal isOpen={isReportsOpen} onClose={() => onReportsClose()}>
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalHeader>User Reports</ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <TableContainer mb={5}>
+                      <Table variant="simple">
+                        <Thead>
+                          <Tr>
+                            <Th>Username</Th>
+                            <Th>Reason</Th>
+                            <Th>Message</Th>
+                          </Tr>
+                        </Thead>
+                        <Tbody>
+                          {reportList?.map((report, index) => (
+                            <Tr>
+                              <Td
+                                onClick={() => setReportedUser(report, index)}
+                                Style={
+                                  index === itemSelectedModal
+                                    ? "cursor: pointer; background: #E4E4E4"
+                                    : "cursor: pointer;"
+                                }
+                              >
+                                {report.reportedUser}
+                              </Td>
+                              <Td
+                                onClick={() => setReportedUser(report, index)}
+                                Style={
+                                  index === itemSelectedModal
+                                    ? "cursor: pointer; background: #E4E4E4"
+                                    : "cursor: pointer;"
+                                }
+                              >
+                                {report.reason}
+                              </Td>
+                              <Td
+                                onClick={() => setReportedUser(report, index)}
+                                Style={
+                                  index === itemSelectedModal
+                                    ? "cursor: pointer; background: #E4E4E4"
+                                    : "cursor: pointer;"
+                                }
+                              >
+                                {report.message}
+                              </Td>
+                            </Tr>
+                          ))}
+                        </Tbody>
+                      </Table>
+                    </TableContainer>
+                    <Text>Set Ban Length</Text>
+                    <Select
+                      mb={5}
+                      value={banLength}
+                      onChange={(e) => setBanLength(e.target.value)}
+                    >
+                      <option value="1">1 day</option>
+                      <option value="7">1 week</option>
+                      <option value="14">2 weeks</option>
+                      <option value="30">1 month</option>
+                      <option value="90">3 months</option>
+                      <option value="180">6 months</option>
+                      <option value="365">1 year</option>
+                      <option value="1825">5 years</option>
+                      <option value="3650">10 years</option>
+                      <option value="36500">Permanent</option>
+                    </Select>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button
+                      colorScheme="blue"
+                      mr={3}
+                      onClick={() => onReportsClose()}
+                    >
+                      Cancel
+                    </Button>
+                    <Button colorScheme="red" onClick={() => banUserHandler()}>
+                      Ban User
+                    </Button>
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
+            </CardFooter>
           </Card>
         </GridItem>
         <GridItem colSpan={1}>

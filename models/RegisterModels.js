@@ -41,6 +41,14 @@ const registerSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  banEndDate: {
+    type: Date,
+    default: null
+  },
+  banCount: {
+    type: Number,
+    default: 0
+  }
 });
 
 module.exports = mongoose.model("accounts", registerSchema);

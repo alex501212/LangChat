@@ -15,6 +15,17 @@ import {
   GridItem,
   Spinner,
   Avatar,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Input,
+  Select,
+  useToast
 } from "@chakra-ui/react";
 
 const socket = io.connect("http://localhost:5000");
@@ -30,10 +41,14 @@ const Chat = () => {
   const [callEnded, setCallEnded] = useState(false);
   const [userData, setUserData] = useState("");
   const [connectedUserData, setConnectedUserData] = useState("");
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [reportMessage, setReportMessage] = useState("");
+  const [reportReason, setReportReason] = useState("");
 
   const myVideo = useRef();
   const userVideo = useRef();
   const connectionRef = useRef();
+  const toast = useToast()
 
   useEffect(() => {
     // set media stream
@@ -91,7 +106,7 @@ const Chat = () => {
               "25-30": false,
               "30-40": false,
               "60+": false,
-            }
+            },
           };
 
           // add user to queue
@@ -124,10 +139,10 @@ const Chat = () => {
     });
 
     socket.on("buttonAction", () => {
-      setCallEnded(true)
-      setCallAccepted(true)
-      setReceivingCall(false)
-    })
+      setCallEnded(true);
+      setCallAccepted(true);
+      setReceivingCall(false);
+    });
   }, []);
 
   useEffect(() => {
@@ -185,12 +200,47 @@ const Chat = () => {
 
   const nextActionHandler = () => {
     socket.emit("buttonAction", caller);
-    window.location.replace("/chat")
-  }
+    window.location.replace("/chat");
+  };
 
   const backActionHandler = () => {
     socket.emit("buttonAction", caller);
-    window.location.replace("/dashboard")
+    window.location.replace("/dashboard");
+  };
+
+  const reportAccountHandler = () => {
+    const formData = {
+      message: reportMessage,
+      reportedUser: connectedUserData?.username,
+      reason: reportReason,
+    }
+    
+    fetch("http://localhost:5000/report", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        onClose();
+        setReportMessage();
+        setReportReason();
+        toast({
+          title: 'Report Recieved.',
+          description: "Our admins will take a look at your report shortly.",
+          status: 'success',
+          duration: 9000,
+          isClosable: true,
+        })
+      });
+  };
+
+  const closeModalHandler = () => {
+    onClose();
+    setReportMessage();
+    setReportReason();
   }
 
   return (
@@ -257,15 +307,65 @@ const Chat = () => {
               <Text fontSize="2xl">
                 User Since: {connectedUserData?.signupdate}
               </Text>
+              <br />
+              <Button colorScheme="red" size="md" onClick={() => onOpen()}>
+                Report User
+              </Button>
+              <Modal isOpen={isOpen} onClose={() => closeModalHandler()}>
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalHeader>Report User</ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <Text mb="8px">Report Message</Text>
+                    <Input
+                      value={reportMessage}
+                      onChange={(e) => setReportMessage(e.target.value)}
+                      mb={5}
+                      placeholder="Message"
+                    />
+                      <Text>Reason</Text>
+                      <Select
+                        value={reportReason}
+                        onChange={(e) => setReportReason(e.target.value)}
+                        mb={5}
+                        placeholder="What is the problem?"
+                      >
+                        <option>Violence or Gore</option>
+                        <option>Bullying or Harassment</option>
+                        <option>Hateful Conduct</option>
+                        <option>Self-Harm</option>
+                        <option>Nudity or Sexually Explicit</option>
+                        <option>Spam, Scams, or Bots</option>
+                        <option>Other</option>
+                      </Select>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button
+                      colorScheme="blue"
+                      mr={3}
+                      onClick={() => closeModalHandler()}
+                    >
+                      Cancel
+                    </Button>
+              
+                      <Button
+                        colorScheme="red"
+                        type="submit"
+                        onClick={() => reportAccountHandler()}
+                      >
+                        Send Report
+                      </Button>
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
             </CardBody>
-            <CardFooter></CardFooter>
           </Card>
         ) : callAccepted ? (
           <Card background="white" size="lg">
             <CardHeader>
               <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
                 <Heading size="lg">{connectedUserData?.username}</Heading>
-
                 <Avatar
                   Style="margin-left: auto"
                   size="2xl"
@@ -287,8 +387,59 @@ const Chat = () => {
               <Text fontSize="2xl">
                 User Since: {connectedUserData?.signupdate}
               </Text>
+              <br />
+              <Button colorScheme="red" size="md" onClick={() => onOpen()}>
+                Report User
+              </Button>
+              <Modal isOpen={isOpen} onClose={() => closeModalHandler()}>
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalHeader>Report User</ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <Text mb="8px">Report Message</Text>
+                    <Input
+                      value={reportMessage}
+                      onChange={(e) => setReportMessage(e.target.value)}
+                      mb={5}
+                      placeholder="Message"
+                    />
+                      <Text>Reason</Text>
+                      <Select
+                        value={reportReason}
+                        onChange={(e) => setReportReason(e.target.value)}
+                        mb={5}
+                        placeholder="What is the problem?"
+                      >
+                        <option>Violence or Gore</option>
+                        <option>Bullying or Harassment</option>
+                        <option>Hateful Conduct</option>
+                        <option>Self-Harm</option>
+                        <option>Nudity or Sexually Explicit</option>
+                        <option>Spam, Scams, or Bots</option>
+                        <option>Other</option>
+                      </Select>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button
+                      colorScheme="blue"
+                      mr={3}
+                      onClick={() => closeModalHandler()}
+                    >
+                      Cancel
+                    </Button>
+              
+                      <Button
+                        type="submit"
+                        colorScheme="red"
+                        onClick={() => reportAccountHandler()}
+                      >
+                        Send Report
+                      </Button>
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
             </CardBody>
-            <CardFooter></CardFooter>
           </Card>
         ) : (
           <Card background="white" size="lg">
