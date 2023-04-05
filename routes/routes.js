@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const registerDetails = require("../models/RegisterModels");
+const reportDetails = require("../models/UserReportModels");
 const bcrypt = require("bcrypt");
 const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
@@ -81,6 +82,15 @@ router.post("/login", async (req, res) => {
       error: "specified user does not exist",
     });
   }
+
+  // is user banned?
+  const currentDate = new Date()
+  
+  if(user.banEndDate !== null && user.banEndDate > currentDate) { // or ban date hasnt passed
+    const formattedDate = user.banEndDate.toUTCString();
+    return res.json({ status: "User Banned", message: `You are banned from accessing LangChat's services until ${formattedDate}` });
+  }
+
   if (await bcrypt.compare(password, user.password)) {
     const token = jwt.sign({ user }, process.env.JWT_SECRET, {
       expiresIn: "1d",
@@ -186,5 +196,69 @@ router.put(
       });
   }
 );
+
+// create new user report
+router.post("/report", async (req, res) => {
+  const newReport = new reportDetails({
+    message: req.body.message,
+    reportedUser: req.body.reportedUser,
+    reason: req.body.reason,
+  });
+  newReport
+    .save()
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((error) => {
+      res.json(error);
+    });
+});
+
+// get all user reports
+router.get("/reports/", (req, res) => {
+  reportDetails
+    .find()
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((error) => {
+      res.json(error);
+    });
+});
+
+// ban user by username
+router.put("/ban/:username", async (req, res) => {
+  // calculate ban end date
+  const banLength = parseInt(req.body.banLength);
+  let banEndDate = new Date();
+
+  banEndDate.setDate(banEndDate.getDate() + banLength);
+
+  registerDetails
+    .updateOne(
+      { username: req.params.username },
+      {
+        $set: {
+          banEndDate: banEndDate,
+        },
+        $inc: {
+          banCount: 1,
+        },
+      }
+    )
+    .then((data) => {
+      reportDetails
+        .deleteOne({ _id: req.body.reportId })
+        .then((data) => {
+          res.json(data);
+        })
+        .catch((error) => {
+          res.json(error);
+        });
+    })
+    .catch((error) => {
+      res.json(error);
+    });
+});
 
 module.exports = router;

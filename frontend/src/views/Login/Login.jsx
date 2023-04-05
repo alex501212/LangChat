@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import "./Login.scss";
-import { Flex, Input, Heading, Button } from "@chakra-ui/react";
+import { Flex, Input, Heading, Button, useToast } from "@chakra-ui/react";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const toast = useToast();
 
   const signIn = () => {
     fetch("http://localhost:5000/login", {
@@ -22,6 +23,18 @@ const Login = () => {
         if (data.status === "ok") {
           sessionStorage.setItem("token", data.token);
           window.location.replace("/dashboard");
+        } else {
+          toast({
+            title: data.status,
+            description: data.message,
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+            containerStyle: {
+              width: "500px",
+              maxWidth: "100%",
+            },
+          });
         }
       });
   };
