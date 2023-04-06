@@ -9,6 +9,7 @@ import {
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
+import bg from "../../bg.png";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -37,7 +38,6 @@ const Login = () => {
             sessionStorage.setItem("token", data.token);
             window.location.replace("/dashboard");
           } else {
-            console.log(data)
             toast({
               description: data.message,
               status: "error",
@@ -62,10 +62,16 @@ const Login = () => {
 
   return (
     <Flex
+      boxShadow="inner"
       height="90vh"
       justifyContent="center"
       alignItems="center"
-      background="gray.500"
+      style={{
+        background: `url(${bg})`,
+        backgroundSize: "1920px 940px",
+        backgroundPosition: "0px -94px",
+        backgroundColor: "#718096"
+      }}
     >
       <Flex
         direction="column"
@@ -73,6 +79,7 @@ const Login = () => {
         borderWidth="5px"
         borderRadius="lg"
         background="white"
+        boxShadow="dark-lg"
       >
         <Heading mb={10}>Log in to LangChat</Heading>
         <Input
