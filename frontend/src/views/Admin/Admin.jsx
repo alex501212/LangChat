@@ -79,6 +79,7 @@ const Admin = () => {
   } = useDisclosure();
   const [banLength, setBanLength] = useState("0");
   const [showPass, setShowPass] = useState(false);
+  const isReports = reportList?.[0] === undefined;
 
   useEffect(() => {
     fetch("http://localhost:5000/users", {
@@ -396,13 +397,14 @@ const Admin = () => {
   return (
     <div>
       <Grid
+        boxShadow="inner"
         h="90vh"
         templateRows="repeat(2, 1fr)"
         templateColumns="repeat(2, 1fr)"
         background="gray.500"
       >
         <GridItem rowSpan={2} colSpan={1} p={14}>
-          <Card background="white" size="lg">
+          <Card background="white" size="lg" boxShadow="dark-lg">
             <CardHeader>
               <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
                 <Heading size="xl"> User Information</Heading>
@@ -645,7 +647,7 @@ const Admin = () => {
           </Card>
         </GridItem>
         <GridItem colSpan={1} p={14}>
-          <Card background="white" size="lg">
+          <Card background="white" size="lg" boxShadow="dark-lg">
             <CardHeader>
               <Heading size="xl">User List</Heading>
             </CardHeader>
@@ -760,7 +762,7 @@ const Admin = () => {
                     >
                       Cancel
                     </Button>
-                    <Button colorScheme="red" onClick={() => banUserHandler()}>
+                    <Button colorScheme="red" onClick={() => banUserHandler()} disabled={isReports}>
                       {banLength === "0" ? "Delete Report" : "Ban User"}
                     </Button>
                   </ModalFooter>
@@ -772,6 +774,7 @@ const Admin = () => {
         <GridItem colSpan={1}>
           <Flex p={14} justifyContent="center" alignItems="center">
             <Button
+              boxShadow="xl"
               type="submit"
               onClick={() => window.location.replace("/dashboard")}
               colorScheme="blue"

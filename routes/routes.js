@@ -98,9 +98,8 @@ router.post("/login", async (req, res) => {
   // is user banned?
   const currentDate = new Date()
   
-  if(user.banEndDate !== null && user.banEndDate > currentDate) { // or ban date hasnt passed
+  if(user.banEndDate !== null && user.banEndDate > currentDate) {
     const formattedDate = user.banEndDate.toUTCString();
-    console.log(formattedDate)
     return res.json({ status: "User Banned", message: `You are banned from accessing LangChat's services until ${formattedDate}` });
   }
 

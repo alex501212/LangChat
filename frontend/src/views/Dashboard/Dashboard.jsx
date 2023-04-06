@@ -61,6 +61,7 @@ const Dashboard = () => {
   const [filters, setFilters] = useState({});
   const [filtersLoaded, setFiltersLoaded] = useState(false);
   const [showPass, setShowPass] = useState(false);
+  const [userSinceDate, setUserSinceDate] = useState("");
 
   const toast = useToast();
 
@@ -70,6 +71,7 @@ const Dashboard = () => {
     } else {
       filters[filter] = false;
     }
+    submitFilters();
   };
 
   const submitFilters = () => {
@@ -319,6 +321,9 @@ const Dashboard = () => {
         setUsername(data.data.username);
         setNativeLang(data.data.nativeLang);
         setTargetLang(data.data.targetLang);
+
+        const userDataDate = new Date(data.data.signupdate);
+        setUserSinceDate(userDataDate.toDateString());
       });
   }, []);
 
@@ -349,18 +354,19 @@ const Dashboard = () => {
 
   return (
     <Grid
+      boxShadow="inner"
       h="90vh"
       templateRows="repeat(2, 1fr)"
       templateColumns="repeat(2, 1fr)"
       background="gray.500"
     >
       <GridItem rowSpan={2} colSpan={1} p={14}>
-        <Card background="white" size="lg">
+        <Card background="white" size="lg" boxShadow="dark-lg">
           <CardHeader>
             <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
               <Heading size="xl"> User Information</Heading>
 
-              <Avatar
+              <Avatar 
                 Style={avatarStyle}
                 onMouseEnter={() => hoverAvatarEnter()}
                 onMouseLeave={() => hoverAvatarLeave()}
@@ -588,12 +594,12 @@ const Dashboard = () => {
             <br />
             <Text fontSize="2xl">Target Language: {userData.targetLang}</Text>
             <br />
-            <Text fontSize="2xl">User Since: {userData.signupdate}</Text>
+            <Text fontSize="2xl">User Since: {userSinceDate}</Text>
           </CardBody>
         </Card>
       </GridItem>
       <GridItem colSpan={1} p={14}>
-        <Card background="white" size="lg">
+        <Card background="white" size="lg" boxShadow="dark-lg">
           <CardHeader>
             <Heading size="xl"> Filters</Heading>
           </CardHeader>
@@ -788,15 +794,6 @@ const Dashboard = () => {
                 </Checkbox>
               )}
             </Stack>
-            <br />
-            <Button
-              type="submit"
-              colorScheme="blue"
-              size="sm"
-              onClick={() => submitFilters()}
-            >
-              Apply Filters
-            </Button>
           </CardBody>
           <CardFooter></CardFooter>
         </Card>
@@ -804,6 +801,7 @@ const Dashboard = () => {
       <GridItem colSpan={1}>
         <Flex p={14} justifyContent="center" alignItems="center">
           <Button
+            boxShadow="xl"
             type="submit"
             onClick={() => window.location.replace("/chat")}
             colorScheme="blue"

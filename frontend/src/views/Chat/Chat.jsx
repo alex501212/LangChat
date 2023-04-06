@@ -44,6 +44,7 @@ const Chat = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [reportMessage, setReportMessage] = useState("");
   const [reportReason, setReportReason] = useState("");
+  const [connectedUserSinceDate, setConnectedUserSinceDate] = useState("");
 
   const myVideo = useRef();
   const userVideo = useRef();
@@ -135,6 +136,8 @@ const Chat = () => {
         .then((data) => {
           setIdToCall(id);
           setConnectedUserData(data);
+          const userDataDate = new Date(data.signupdate);
+          setConnectedUserSinceDate(userDataDate.toDateString());
         });
     });
 
@@ -265,6 +268,7 @@ const Chat = () => {
 
   return (
     <Grid
+      boxShadow="inner"
       h="90vh"
       templateRows="repeat(4, 1fr)"
       templateColumns="repeat(3, 1fr)"
@@ -288,7 +292,7 @@ const Chat = () => {
           </Flex>
         ) : receivingCall && !callAccepted ? (
           <Flex p={250} justifyContent="center" alignItems="center">
-            <Button colorScheme="blue" onClick={answerCall} size="lg">
+            <Button boxShadow='xl' colorScheme="blue" onClick={answerCall} size="lg">
               Accept
             </Button>
           </Flex>
@@ -307,7 +311,7 @@ const Chat = () => {
       </GridItem>
       <GridItem rowSpan={3} colSpan={1} p={10}>
         {callEnded ? (
-          <Card background="white" size="lg">
+          <Card background="white" size="lg" boxShadow="dark-lg">
             <CardHeader>
               <Heading size="lg">
                 {connectedUserData?.username} left the call
@@ -325,7 +329,7 @@ const Chat = () => {
               <Text fontSize="2xl">Gender: {connectedUserData?.gender}</Text>
               <br />
               <Text fontSize="2xl">
-                User Since: {connectedUserData?.signupdate}
+                User Since: {connectedUserSinceDate}
               </Text>
               <br />
               <Button colorScheme="red" size="md" onClick={() => onOpen()}>
@@ -381,8 +385,8 @@ const Chat = () => {
               </Modal>
             </CardBody>
           </Card>
-        ) : callAccepted ? (
-          <Card background="white" size="lg">
+        ) : callAccepted || receivingCall ? (
+          <Card background="white" size="lg" boxShadow="dark-lg">
             <CardHeader>
               <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
                 <Heading size="lg">{connectedUserData?.username}</Heading>
@@ -405,7 +409,7 @@ const Chat = () => {
               <Text fontSize="2xl">Gender: {connectedUserData?.gender}</Text>
               <br />
               <Text fontSize="2xl">
-                User Since: {connectedUserData?.signupdate}
+                User Since: {connectedUserSinceDate}
               </Text>
               <br />
               <Button colorScheme="red" size="md" onClick={() => onOpen()}>
@@ -462,7 +466,7 @@ const Chat = () => {
             </CardBody>
           </Card>
         ) : (
-          <Card background="white" size="lg">
+          <Card background="white" size="lg" boxShadow="dark-lg">
             <CardHeader>
               <Heading size="lg">Finding Users ...</Heading>
             </CardHeader>
@@ -486,6 +490,7 @@ const Chat = () => {
         <Flex p={14} justifyContent="center" alignItems="center">
           {callAccepted && !callEnded ? (
             <Button
+              boxShadow="xl"
               colorScheme="blue"
               onClick={() => backActionHandler()}
               size="lg"
@@ -494,6 +499,7 @@ const Chat = () => {
             </Button>
           ) : (
             <Button
+              boxShadow="xl"
               colorScheme="blue"
               onClick={() => backActionHandler()}
               size="lg"
@@ -520,6 +526,7 @@ const Chat = () => {
         <Flex p={14} justifyContent="center" alignItems="center">
           {callAccepted || callEnded || receivingCall ? (
             <Button
+              boxShadow="xl"
               colorScheme="blue"
               onClick={() => nextActionHandler()}
               size="lg"
@@ -527,7 +534,7 @@ const Chat = () => {
               Next
             </Button>
           ) : (
-            <Button colorScheme="blue" isDisabled size="lg">
+            <Button boxShadow="xl" colorScheme="blue" isDisabled size="lg">
               Next
             </Button>
           )}
