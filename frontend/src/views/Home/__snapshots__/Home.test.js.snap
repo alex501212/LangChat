@@ -3,22 +3,35 @@
 exports[`matches snapshot 1`] = `
 <div>
   <div
-    className="css-1b4xnu2"
+    className="css-shmk69"
+    style={
+      Object {
+        "background": "url(bg.png)",
+        "backgroundColor": "#718096",
+        "backgroundPosition": "0px -94px",
+        "backgroundSize": "1920px 940px",
+      }
+    }
   >
     <div
       className="chakra-button__group css-goy9dw"
       data-orientation="horizontal"
       role="group"
     >
+      <h2
+        className="chakra-heading css-kbn7if"
+      >
+        Welcome to LangChat
+      </h2>
       <button
-        className="chakra-button css-1fysbuj"
+        className="chakra-button css-5hrk86"
         onClick={[Function]}
         type="button"
       >
         Login
       </button>
       <button
-        className="chakra-button css-1fysbuj"
+        className="chakra-button css-5hrk86"
         onClick={[Function]}
         type="button"
       >

@@ -2,13 +2,13 @@
 
 exports[`matches snapshot 1`] = `
 <div
-  className="css-d5rpz4"
+  className="css-lizsae"
 >
   <div
     className="css-1u83qib"
   >
     <div
-      className="chakra-card css-1rtzu7b"
+      className="chakra-card css-5fguxy"
     >
       <div
         className="chakra-card__header css-0"
@@ -24,6 +24,7 @@ exports[`matches snapshot 1`] = `
           <span
             Style="margin-left: auto; opacity: 100%;"
             className="chakra-avatar css-1ruhx4w"
+            data-testid="edit-modal"
             onClick={[Function]}
             onMouseEnter={[Function]}
             onMouseLeave={[Function]}
@@ -134,7 +135,7 @@ exports[`matches snapshot 1`] = `
     className="css-mx3f2t"
   >
     <div
-      className="chakra-card css-1rtzu7b"
+      className="chakra-card css-5fguxy"
     >
       <div
         className="chakra-card__header css-0"
@@ -149,11 +150,43 @@ exports[`matches snapshot 1`] = `
         className="chakra-card__body css-0"
       >
         <p
-          className="chakra-text css-1n49pl7"
+          className="chakra-text css-6dvxm2"
         >
           Matching you with native 
            speakers
         </p>
+        <br />
+        <hr />
+        <br />
+        <p
+          className="chakra-text css-1ezsviu"
+        >
+          Interests
+        </p>
+        <div
+          className="chakra-stack css-1qwdsol"
+        />
+        <div
+          className="chakra-stack css-1qwdsol"
+        />
+        <br />
+        <p
+          className="chakra-text css-1ezsviu"
+        >
+          Gender
+        </p>
+        <div
+          className="chakra-stack css-1qwdsol"
+        />
+        <br />
+        <p
+          className="chakra-text css-1ezsviu"
+        >
+          Age
+        </p>
+        <div
+          className="chakra-stack css-1qwdsol"
+        />
       </div>
       <div
         className="chakra-card__footer css-k008qs"
@@ -167,7 +200,7 @@ exports[`matches snapshot 1`] = `
       className="css-23zkys"
     >
       <button
-        className="chakra-button css-4xx2wk"
+        className="chakra-button css-9pzf5i"
         onClick={[Function]}
         type="submit"
       >

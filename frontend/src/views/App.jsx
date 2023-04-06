@@ -5,7 +5,7 @@ import Dashboard from "./Dashboard/Dashboard";
 import Admin from "./Admin/Admin";
 import Chat from "./Chat/Chat";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import NavHeader from "../components/NavHeader";
+import NavHeader from "../components/NavHeader/NavHeader";
 
 function App() {
   return (

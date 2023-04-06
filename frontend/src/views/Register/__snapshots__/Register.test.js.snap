@@ -2,10 +2,18 @@
 
 exports[`matches snapshot 1`] = `
 <div
-  className="css-1muqdga"
+  className="css-xccait"
+  style={
+    Object {
+      "background": "url(bg.png)",
+      "backgroundColor": "#718096",
+      "backgroundPosition": "0px -94px",
+      "backgroundSize": "1920px 940px",
+    }
+  }
 >
   <div
-    className="css-1bh5ia3"
+    className="css-7g9ilp"
   >
     <h2
       className="chakra-heading css-1r2f04i"
@@ -42,7 +50,7 @@ exports[`matches snapshot 1`] = `
       >
         <input
           aria-valuemax={100}
-          aria-valuemin={1}
+          aria-valuemin={18}
           aria-valuenow={18}
           aria-valuetext="18"
           autoComplete="off"
@@ -83,8 +91,9 @@ exports[`matches snapshot 1`] = `
             </svg>
           </div>
           <div
+            aria-disabled={true}
             className="css-8bep6f"
-            disabled={false}
+            disabled={true}
             onPointerDown={[Function]}
             onPointerLeave={[Function]}
             onPointerUp={[Function]}
@@ -176,15 +185,31 @@ exports[`matches snapshot 1`] = `
       placeholder="Username"
       value=""
     />
-    <input
-      className="chakra-input css-r7q7qr"
-      onBlur={[Function]}
-      onChange={[Function]}
-      onFocus={[Function]}
-      placeholder="Password"
-      type="password"
-      value=""
-    />
+    <div
+      className="chakra-input__group css-4302v8"
+    >
+      <input
+        className="chakra-input css-r7q7qr"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        placeholder="Password"
+        type="password"
+        value=""
+      />
+      <div
+        className="chakra-input__right-element css-1x84ua"
+        size="md"
+      >
+        <button
+          className="chakra-button css-xsdlqf"
+          onClick={[Function]}
+          type="button"
+        >
+          Show
+        </button>
+      </div>
+    </div>
     <input
       className="chakra-input css-r7q7qr"
       onBlur={[Function]}
