@@ -410,6 +410,7 @@ const Admin = () => {
                 <Heading size="xl"> User Information</Heading>
 
                 <Avatar
+                  data-testid="edit-modal"
                   Style={avatarStyle}
                   onMouseEnter={() => hoverAvatarEnter()}
                   onMouseLeave={() => hoverAvatarLeave()}

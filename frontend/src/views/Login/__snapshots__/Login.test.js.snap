@@ -2,10 +2,18 @@
 
 exports[`matches snapshot 1`] = `
 <div
-  className="css-1muqdga"
+  className="css-xccait"
+  style={
+    Object {
+      "background": "url(bg.png)",
+      "backgroundColor": "#718096",
+      "backgroundPosition": "0px -94px",
+      "backgroundSize": "1920px 940px",
+    }
+  }
 >
   <div
-    className="css-1pk8ame"
+    className="css-1rr993r"
   >
     <h2
       className="chakra-heading css-1r2f04i"
@@ -17,18 +25,36 @@ exports[`matches snapshot 1`] = `
       onBlur={[Function]}
       onChange={[Function]}
       onFocus={[Function]}
+      onKeyDown={[Function]}
       placeholder="Username"
       value=""
     />
-    <input
-      className="chakra-input css-r7q7qr"
-      onBlur={[Function]}
-      onChange={[Function]}
-      onFocus={[Function]}
-      placeholder="Password"
-      type="password"
-      value=""
-    />
+    <div
+      className="chakra-input__group css-4302v8"
+    >
+      <input
+        className="chakra-input css-r7q7qr"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        placeholder="Password"
+        type="password"
+        value=""
+      />
+      <div
+        className="chakra-input__right-element css-1x84ua"
+        size="md"
+      >
+        <button
+          className="chakra-button css-xsdlqf"
+          onClick={[Function]}
+          type="button"
+        >
+          Show
+        </button>
+      </div>
+    </div>
     <button
       className="chakra-button css-4xx2wk"
       onClick={[Function]}

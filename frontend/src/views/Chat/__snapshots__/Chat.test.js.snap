@@ -2,7 +2,7 @@
 
 exports[`matches snapshot 1`] = `
 <div
-  className="css-5wi36k"
+  className="css-461r85"
 >
   <div
     className="css-1w8f165"
@@ -25,7 +25,7 @@ exports[`matches snapshot 1`] = `
     className="css-1azb0ov"
   >
     <div
-      className="chakra-card css-1rtzu7b"
+      className="chakra-card css-5fguxy"
     >
       <div
         className="chakra-card__header css-0"
@@ -65,7 +65,7 @@ exports[`matches snapshot 1`] = `
       className="css-23zkys"
     >
       <button
-        className="chakra-button css-4xx2wk"
+        className="chakra-button css-9pzf5i"
         onClick={[Function]}
         type="button"
       >
@@ -87,7 +87,7 @@ exports[`matches snapshot 1`] = `
       className="css-23zkys"
     >
       <button
-        className="chakra-button css-4xx2wk"
+        className="chakra-button css-9pzf5i"
         disabled={true}
         type="button"
       >

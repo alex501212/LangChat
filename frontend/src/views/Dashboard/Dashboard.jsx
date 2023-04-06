@@ -368,6 +368,7 @@ const Dashboard = () => {
 
               <Avatar 
                 Style={avatarStyle}
+                data-testid="edit-modal"
                 onMouseEnter={() => hoverAvatarEnter()}
                 onMouseLeave={() => hoverAvatarLeave()}
                 size="2xl"
