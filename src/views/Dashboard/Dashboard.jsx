@@ -232,7 +232,7 @@ const Dashboard = () => {
     formData.append("oldPassword", oldPassword);
     formData.append("newPassword", newPassword);
 
-    fetch(`http://localhost:5000/users/${userData.username}`, {
+    fetch(`https://langchat-api.onrender.com/users/${userData.username}`, {
       method: "PUT",
       body: formData,
     })
@@ -301,7 +301,7 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:5000/profile", {
+    fetch("https://langchat-api.onrender.com/profile", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -340,7 +340,7 @@ const Dashboard = () => {
   };
 
   const deleteAccountHandler = () => {
-    fetch(`http://localhost:5000/users/${userData.username}`, {
+    fetch(`https://langchat-api.onrender.com/users/${userData.username}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
@@ -372,7 +372,7 @@ const Dashboard = () => {
                 onMouseEnter={() => hoverAvatarEnter()}
                 onMouseLeave={() => hoverAvatarLeave()}
                 size="2xl"
-                src={`http://localhost:5000/${userData.username}_profile_image.jpg`}
+                src={`https://langchat-api.onrender.com/${userData.username}_profile_image.jpg`}
                 onClick={() => onOpen()}
               />
               {avatarHovered ? (

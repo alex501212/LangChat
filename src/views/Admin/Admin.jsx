@@ -82,7 +82,7 @@ const Admin = () => {
   const isReports = reportList?.[0] === undefined;
 
   useEffect(() => {
-    fetch("http://localhost:5000/users", {
+    fetch("https://langchat-api.onrender.com/users", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -95,7 +95,7 @@ const Admin = () => {
         setItemSelected(0);
       });
 
-    fetch("http://localhost:5000/reports", {
+    fetch("https://langchat-api.onrender.com/reports", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -141,7 +141,7 @@ const Admin = () => {
   };
 
   const deleteAccountHandler = () => {
-    fetch(`http://localhost:5000/users/${userData.username}`, {
+    fetch(`https://langchat-api.onrender.com/users/${userData.username}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
@@ -292,7 +292,7 @@ const Admin = () => {
     formData.append("oldPassword", oldPassword);
     formData.append("newPassword", newPassword);
 
-    fetch(`http://localhost:5000/users/${userData.username}`, {
+    fetch(`https://langchat-api.onrender.com/users/${userData.username}`, {
       method: "PUT",
       body: formData,
     })
@@ -351,7 +351,7 @@ const Admin = () => {
   const toast = useToast();
 
   const banUserHandler = () => {
-    fetch(`http://localhost:5000/ban/${userToBan}`, {
+    fetch(`https://langchat-api.onrender.com/ban/${userToBan}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -379,7 +379,7 @@ const Admin = () => {
             isClosable: true,
           });
         }
-        fetch("http://localhost:5000/reports", {
+        fetch("https://langchat-api.onrender.com/reports", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -415,7 +415,7 @@ const Admin = () => {
                   onMouseEnter={() => hoverAvatarEnter()}
                   onMouseLeave={() => hoverAvatarLeave()}
                   size="2xl"
-                  src={`http://localhost:5000/${userData.username}_profile_image.jpg`}
+                  src={`https://langchat-api.onrender.com/${userData.username}_profile_image.jpg`}
                   onClick={() => onUserEditOpen()}
                 />
                 {avatarHovered ? (

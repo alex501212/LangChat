@@ -22,7 +22,7 @@ const Login = () => {
 
   const signIn = () => {
     if (username !== "") {
-      fetch("http://localhost:5000/login", {
+      fetch("https://langchat-api.onrender.com/login", {
         method: "POST",
         headers: {
           "Content-type": "application/json",

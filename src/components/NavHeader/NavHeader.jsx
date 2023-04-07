@@ -14,7 +14,7 @@ const NavHeader = () => {
 
     if (token) {
       setIsToken(true);
-      fetch("http://localhost:5000/profile", {
+      fetch("https://langchat-api.onrender.com/profile", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

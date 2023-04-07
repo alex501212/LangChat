@@ -28,7 +28,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 
-const socket = io.connect("http://localhost:5000");
+const socket = io.connect("https://langchat-api.onrender.com");
 
 const Chat = () => {
   const [me, setMe] = useState("");
@@ -71,7 +71,7 @@ const Chat = () => {
   useEffect(() => {
     // intialize connection
     socket.on("me", (id, connections) => {
-      fetch("http://localhost:5000/profile", {
+      fetch("https://langchat-api.onrender.com/profile", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -126,7 +126,7 @@ const Chat = () => {
 
   useEffect(() => {
     socket.on("matchedUser", (user, id) => {
-      fetch(`http://localhost:5000/profile/${user}`, {
+      fetch(`https://langchat-api.onrender.com/profile/${user}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -238,7 +238,7 @@ const Chat = () => {
       reason: reportReason,
     };
 
-    fetch("http://localhost:5000/report", {
+    fetch("https://langchat-api.onrender.com/report", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -393,7 +393,7 @@ const Chat = () => {
                 <Avatar
                   Style="margin-left: auto"
                   size="2xl"
-                  src={`http://localhost:5000/${connectedUserData?.username}_profile_image.jpg`}
+                  src={`https://langchat-api.onrender.com/${connectedUserData?.username}_profile_image.jpg`}
                 />
               </Flex>
             </CardHeader>

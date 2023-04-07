@@ -191,7 +191,7 @@ const Register = () => {
       formData.append("targetLang", targetLang);
       formData.append("profileImage", profileImage);
 
-      fetch("http://localhost:5000/register", {
+      fetch("https://langchat-api.onrender.com/register", {
         method: "POST",
         body: formData,
       })
