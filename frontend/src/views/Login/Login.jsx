@@ -39,7 +39,7 @@ const Login = () => {
             window.location.replace("/dashboard");
           } else {
             toast({
-              description: data.message,
+              description: data.error,
               status: "error",
               duration: 9000,
               isClosable: true,
