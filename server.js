@@ -9,7 +9,7 @@ const cors = require("cors");
 const cron = require("node-cron");
 const io = require("socket.io")(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://langchat.onrender.com",
     methods: ["GET", "POST"],
   },
 });
