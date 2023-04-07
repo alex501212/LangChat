@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
-const { rename } = require("node:fs");
+const { rename } = require("fs");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
