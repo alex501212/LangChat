@@ -119,10 +119,7 @@ const Admin = () => {
     setUsername(userData.username);
     setNativeLang(userData.nativeLang);
     setTargetLang(userData.targetLang);
-    setOldPassword("");
-    setNewPassword("");
     setDeleteValue("");
-
     onUserEditClose();
   };
 
@@ -288,8 +285,6 @@ const Admin = () => {
     setUsername(user.username);
     setNativeLang(user.nativeLang);
     setTargetLang(user.targetLang);
-    setOldPassword("");
-    setNewPassword("");
     setDeleteValue("");
     setItemSelected(index);
   };
