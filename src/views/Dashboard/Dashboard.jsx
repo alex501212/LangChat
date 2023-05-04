@@ -134,53 +134,54 @@ const Dashboard = () => {
       return;
     }
 
-    if (oldPassword === newPassword) {
-      toast({
-        description: "Passwords are not different",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
+    if (oldPassword !== "" && newPassword !== "") {
+      if (oldPassword === newPassword) {
+        toast({
+          description: "Passwords are not different",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+        return;
+      }
+      if (newPassword.length < 8 && newPassword !== "") {
+        toast({
+          description: "Your new password must be 8 characters or more",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+        return;
+      }
+
+      if (
+        (!newPassword.match(/[a-z]/) || !newPassword.match(/[A-Z]/)) &&
+        newPassword !== ""
+      ) {
+        toast({
+          description:
+            "Your new password must contain uppercase and lowercase characters",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+        return;
+      }
+
+      if (!newPassword.match(/[0-9]/) && newPassword !== "") {
+        toast({
+          description: "Your new password must contain at least one number",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+        return;
+      }
     }
 
     if (username.length < 4) {
       toast({
         description: "Username must be at least 4 characters long",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
-    }
-
-    if (newPassword.length < 8 && newPassword !== "") {
-      toast({
-        description: "Your new password must be 8 characters or more",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
-    }
-
-    if (
-      (!newPassword.match(/[a-z]/) || !newPassword.match(/[A-Z]/)) &&
-      newPassword !== ""
-    ) {
-      toast({
-        description:
-          "Your new password must contain uppercase and lowercase characters",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
-    }
-
-    if (!newPassword.match(/[0-9]/) && newPassword !== "") {
-      toast({
-        description: "Your new password must contain at least one number",
         status: "error",
         duration: 2000,
         isClosable: true,
@@ -229,8 +230,10 @@ const Dashboard = () => {
     formData.append("nativeLang", nativeLang);
     formData.append("targetLang", targetLang);
     formData.append("profileImage", profileImage);
-    formData.append("oldPassword", oldPassword);
-    formData.append("newPassword", newPassword);
+    if (oldPassword !== "" && newPassword !== "") {
+      formData.append("oldPassword", oldPassword);
+      formData.append("newPassword", newPassword);
+    }
 
     fetch(`https://langchat-api.onrender.com/users/${userData.username}`, {
       method: "PUT",
@@ -366,7 +369,7 @@ const Dashboard = () => {
             <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
               <Heading size="xl"> User Information</Heading>
 
-              <Avatar 
+              <Avatar
                 Style={avatarStyle}
                 data-testid="edit-modal"
                 onMouseEnter={() => hoverAvatarEnter()}

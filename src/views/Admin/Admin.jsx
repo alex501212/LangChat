@@ -52,8 +52,6 @@ const Admin = () => {
   const [gender, setGender] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
   const [nativeLang, setNativeLang] = useState("");
   const [targetLang, setTargetLang] = useState("");
   const [profileImage, setProfileImage] = useState("");
@@ -194,53 +192,9 @@ const Admin = () => {
       return;
     }
 
-    if (oldPassword === newPassword) {
-      toast({
-        description: "Passwords are not different",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
-    }
-
     if (username.length < 4) {
       toast({
         description: "Username must be at least 4 characters long",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
-    }
-
-    if (newPassword.length < 8 && newPassword !== "") {
-      toast({
-        description: "Your new password must be 8 characters or more",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
-    }
-
-    if (
-      (!newPassword.match(/[a-z]/) || !newPassword.match(/[A-Z]/)) &&
-      newPassword !== ""
-    ) {
-      toast({
-        description:
-          "Your new password must contain uppercase and lowercase characters",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
-    }
-
-    if (!newPassword.match(/[0-9]/) && newPassword !== "") {
-      toast({
-        description: "Your new password must contain at least one number",
         status: "error",
         duration: 2000,
         isClosable: true,
@@ -289,8 +243,6 @@ const Admin = () => {
     formData.append("nativeLang", nativeLang);
     formData.append("targetLang", targetLang);
     formData.append("profileImage", profileImage);
-    formData.append("oldPassword", oldPassword);
-    formData.append("newPassword", newPassword);
 
     fetch(`https://langchat-api.onrender.com/users/${userData.username}`, {
       method: "PUT",
@@ -512,32 +464,6 @@ const Admin = () => {
                         onChange={(e) => setUsername(e.target.value)}
                         mb={5}
                         placeholder="Username"
-                      />
-
-                      <InputGroup size="md">
-                        <Input
-                          value={oldPassword}
-                          onChange={(e) => setOldPassword(e.target.value)}
-                          mb={5}
-                          type={showPass ? "text" : "password"}
-                          placeholder="Old Password"
-                        />
-                        <InputRightElement width="4.5rem">
-                          <Button
-                            h="1.75rem"
-                            size="sm"
-                            onClick={handleHideToggle}
-                          >
-                            {showPass ? "Hide" : "Show"}
-                          </Button>
-                        </InputRightElement>
-                      </InputGroup>
-                      <Input
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                        mb={5}
-                        type={"password"}
-                        placeholder="New Password"
                       />
                       <Text mb="8px">Native Language</Text>
                       <Select
@@ -763,7 +689,11 @@ const Admin = () => {
                     >
                       Cancel
                     </Button>
-                    <Button colorScheme="red" onClick={() => banUserHandler()} disabled={isReports}>
+                    <Button
+                      colorScheme="red"
+                      onClick={() => banUserHandler()}
+                      disabled={isReports}
+                    >
                       {banLength === "0" ? "Delete Report" : "Ban User"}
                     </Button>
                   </ModalFooter>
