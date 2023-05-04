@@ -100,7 +100,7 @@ router.post("/login", async (req, res) => {
   
   if(user.banEndDate !== null && user.banEndDate > currentDate) {
     const formattedDate = user.banEndDate.toUTCString();
-    return res.json({ status: "User Banned", message: `You are banned from accessing LangChat's services until ${formattedDate}` });
+    return res.json({ status: "User Banned", error: `You are banned from accessing LangChat's services until ${formattedDate}` });
   }
 
   if (await bcrypt.compare(password, user.password)) {
@@ -111,10 +111,10 @@ router.post("/login", async (req, res) => {
     if (res.status(201)) {
       return res.json({ status: "ok", token: token });
     } else {
-      return res.json({ status: "error", message: "Invalid password" });
+      return res.json({ status: "error", error: "Invalid password" });
     }
   }
-  res.json({ message: "Invalid password" });
+  res.json({ error: "Invalid password" });
 });
 
 router.post("/profile", async (req, res) => {

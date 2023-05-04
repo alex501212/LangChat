@@ -193,54 +193,55 @@ const Admin = () => {
       });
       return;
     }
+    if (oldPassword !== "" && newPassword !== "") {
+      if (oldPassword === newPassword) {
+        toast({
+          description: "Passwords are not different",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+        return;
+      }
 
-    if (oldPassword === newPassword) {
-      toast({
-        description: "Passwords are not different",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
+      if (newPassword.length < 8 && newPassword !== "") {
+        toast({
+          description: "Your new password must be 8 characters or more",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+        return;
+      }
+
+      if (
+        (!newPassword.match(/[a-z]/) || !newPassword.match(/[A-Z]/)) &&
+        newPassword !== ""
+      ) {
+        toast({
+          description:
+            "Your new password must contain uppercase and lowercase characters",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+        return;
+      }
+
+      if (!newPassword.match(/[0-9]/) && newPassword !== "") {
+        toast({
+          description: "Your new password must contain at least one number",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+        return;
+      }
     }
 
     if (username.length < 4) {
       toast({
         description: "Username must be at least 4 characters long",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
-    }
-
-    if (newPassword.length < 8 && newPassword !== "") {
-      toast({
-        description: "Your new password must be 8 characters or more",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
-    }
-
-    if (
-      (!newPassword.match(/[a-z]/) || !newPassword.match(/[A-Z]/)) &&
-      newPassword !== ""
-    ) {
-      toast({
-        description:
-          "Your new password must contain uppercase and lowercase characters",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
-    }
-
-    if (!newPassword.match(/[0-9]/) && newPassword !== "") {
-      toast({
-        description: "Your new password must contain at least one number",
         status: "error",
         duration: 2000,
         isClosable: true,
@@ -289,8 +290,10 @@ const Admin = () => {
     formData.append("nativeLang", nativeLang);
     formData.append("targetLang", targetLang);
     formData.append("profileImage", profileImage);
-    formData.append("oldPassword", oldPassword);
-    formData.append("newPassword", newPassword);
+    if (oldPassword !== "" && newPassword !== "") {
+      formData.append("oldPassword", oldPassword);
+      formData.append("newPassword", newPassword);
+    }
 
     fetch(`http://localhost:5000/users/${userData.username}`, {
       method: "PUT",
@@ -763,7 +766,11 @@ const Admin = () => {
                     >
                       Cancel
                     </Button>
-                    <Button colorScheme="red" onClick={() => banUserHandler()} disabled={isReports}>
+                    <Button
+                      colorScheme="red"
+                      onClick={() => banUserHandler()}
+                      disabled={isReports}
+                    >
                       {banLength === "0" ? "Delete Report" : "Ban User"}
                     </Button>
                   </ModalFooter>
