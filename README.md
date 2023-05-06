@@ -1,5 +1,6 @@
 # LangChat
 A matching based video chat application for language learners
 
-To run the backend server, from the project route folder run - npm run dev
-To run the frontend from the "frontend" folder run - npm start
+First install node modules by running "npm i" for both the root and frontend folder
+Next run the backend server, from the project route folder using "npm run dev"
+Then run the frontend from the "frontend" folder using "npm start"
